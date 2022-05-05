@@ -3,7 +3,7 @@ import orderService from './orderService'
 
 const initialState = {
   orders: [],
-  order: [],
+  order: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -31,11 +31,11 @@ export const createOrder = createAsyncThunk(
 
 // Get tables
 export const getOrders = createAsyncThunk(
-  'tables/getAll',
-  async (order, thunkAPI) => {
+  'orders/getOne',
+  async (orderId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await orderService.getOrders(order, token)
+      return await orderService.getOrders(orderId, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -48,46 +48,27 @@ export const getOrders = createAsyncThunk(
   }
 )
 
-// Get tables
-// export const getTable = createAsyncThunk(
-//   'tables/getOne',
-//   async (tableName, thunkAPI) => {
-//     try {
-//       const token = thunkAPI.getState().auth.user.token
-//       return await tableService.getTable(tableName, token)
-//     } catch (error) {
-//       const message =
-//         (error.response &&
-//           error.response.data &&
-//           error.response.data.message) ||
-//         error.message ||
-//         error.toString()
-//       return thunkAPI.rejectWithValue(message)
-//     }
-//   }
-// )
-
-// // Delete user table
-// export const deleteTable = createAsyncThunk(
-//   'tables/delete',
-//   async (id, thunkAPI) => {
-//     try {
-//       const token = thunkAPI.getState().auth.user.token
-//       return await tableService.deleteTable(id, token)
-//     } catch (error) {
-//       const message =
-//         (error.response &&
-//           error.response.data &&
-//           error.response.data.message) ||
-//         error.message ||
-//         error.toString()
-//       return thunkAPI.rejectWithValue(message)
-//     }
-//   }
-// )
+// update order
+export const updateOrder = createAsyncThunk(
+  'orders/update',
+  async (order, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token
+      return await orderService.updateOrder(order.id, order, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 
 export const orderSlice = createSlice({
-  name: 'order',
+  name: 'orders',
   initialState,
   reducers: {
     reset: (state) => initialState,
@@ -116,6 +97,20 @@ export const orderSlice = createSlice({
         state.order = action.payload
       })
       .addCase(getOrders.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(updateOrder.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateOrder.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.message = 'success'
+        state.order = action.payload
+      })
+      .addCase(updateOrder.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

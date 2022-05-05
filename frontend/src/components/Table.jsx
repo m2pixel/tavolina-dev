@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function Table({ table, user }) {
-  console.log(table.opened)
+  
   const style = table.opened
     ? 'w-40 h-52 bg-tableOff rounded font-space-grotesk py-5 text-center'
     : 'w-40 h-52 bg-tableOn rounded font-space-grotesk py-5 text-center'

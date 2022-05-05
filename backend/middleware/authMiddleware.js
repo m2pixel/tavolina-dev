@@ -34,7 +34,7 @@ const protect = asyncHandler(async (req, res, next) => {
 })
 
 const hasPermission = asyncHandler(async (req, res, next) => {
-  console.log(req.body)
+  // console.log(req.body)
   try {
     console.log(`hasPermission: ${req.params}`)
 

@@ -17,7 +17,7 @@ export default function Home() {
     }
 
     dispatch(getTables())
-  }, [dispatch])
+  }, [dispatch, navigate, user])
 
   const showTables = tables.map((table) => (
     <Link key={table._id} to={`/${table.name}`}>

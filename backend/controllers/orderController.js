@@ -1,84 +1,79 @@
 const asyncHandler = require('express-async-handler')
 const Order = require('../models/orderModel')
+// const Table = require('../models/tableModel')
 
-// @desc    Set order
+// @desc    create order
 // @route   POST /api/orders
 // @access  private
-const setOrder = asyncHandler(async (req, res) => {
-  if (!req.body.table) {
+const createOrder = asyncHandler(async (req, res) => {
+  if (!req.body.table || !req.body.user || !req.user.id) {
     res.status(400)
-    throw new Error('Please add a text field')
+    throw new Error('Ju lutem plotesoni te gjitha te dhenat.')
   }
 
   const order = await Order.create({
     table: req.body.table,
-    orders: req.body.orders,
     user: req.user.id,
+    orders: req.body.orders,
   })
 
   res.status(200).json(order)
 })
 
 // @desc     Get orders
-// @route   POST /api/orders/order
+// @route   GET /api/orders/:id
 // @access  private
 const getOrders = asyncHandler(async (req, res) => {
-  const order = await Order.find({ table: req.body.table, paid: false })
+  const order = await Order.findOne({ table: req.params.id, paid: false })
+
+  if (!order) {
+    res.status(400)
+    throw new Error('Order not found')
+  }
 
   res.status(200).json(order)
 })
 
-// @desc    Authenticate a user
-// @route   POST /api/users/login
-// @access  Public
-// const loginUser = asyncHandler(async (req, res) => {
-//   const { email, password } = req.body
+// @desc     update order
+// @route   PUT /api/orders/:id
+// @access  private
+const updateOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findOneAndUpdate(
+    { _id: req.params.id },
+    { $set: { orders: req.body.orders } },
+    { new: true }
+  )
 
-//   // Check for user email
-//   const user = await User.findOne({ email })
+  if (!req.body.orders) {
+    res.status(400)
+    throw new Error('Orders object not found')
+  }
 
-//   if (user && (await bcrypt.compare(password, user.password))) {
-//     res.json({
-//       _id: user.id,
-//       name: user.name,
-//       email: user.email,
-//       role: user.role,
-//       token: generateToken(user._id),
-//     })
-//   } else {
-//     res.status(400)
-//     throw new Error('Invalid credentials')
-//   }
-// })
+  if (!order) {
+    res.status(400)
+    throw new Error('order not found')
+  }
 
-// // @desc    Get user data
-// // @route   GET /api/users/me
-// // @access  Private
-// const getMe = asyncHandler(async (req, res) => {
-//   res.status(200).json(req.user)
-// })
+  res.status(200).json(order)
+})
 
-// // @desc    Delete user
-// // @route   DELETE /api/users/:id
-// // @access  Private
-// const deleteUser = asyncHandler(async (req, res) => {
-//   const user = await User.findByIdAndDelete(req.params.id)
+// @desc    Delete orders
+// @route   delete /api/orders/:id
+// @access  private
+const deleteOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findOneAndRemove({ _id: req.params.id })
 
-//   if (!user) {
-//     req.stasus(400)
-//     throw new Error('user didnt deleted')
-//   }
-//   res.status(200).json({ message: 'User removed' })
-// })
+  if (!order) {
+    res.status(400)
+    throw new Error('Order not found')
+  }
 
-// // Generate JWT
-// const generateToken = (id) => {
-//   return jwt.sign({ id }, process.env.JWT_SECRET, {
-//     expiresIn: '30d',
-//   })
-// }
+  res.status(200).json('Order removed')
+})
 
 module.exports = {
-  setOrder,
+  createOrder,
   getOrders,
+  updateOrder,
+  deleteOrder,
 }

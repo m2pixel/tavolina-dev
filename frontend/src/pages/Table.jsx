@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { getTable, openTable, closeTable } from '../features/tables/tableSlice'
+import {
+  getTable,
+  openTable,
+  closeTable,
+  resetTable,
+} from '../features/tables/tableSlice'
 import { getCategories } from '../features/categories/categorySlice'
 import ProductList from '../components/ProductList'
 import TableData from '../components/TableData'
-import { createOrder, getOrders } from '../features/orders/orderSlice'
+import Spinner from '../components/Spinner'
+import {
+  createOrder,
+  getOrders,
+  updateOrder,
+} from '../features/orders/orderSlice'
 import { toast } from 'react-toastify'
 import {
   faPizzaSlice,
@@ -16,24 +26,50 @@ import {
   faScissors,
 } from '@fortawesome/free-solid-svg-icons'
 import Button from '../components/Button'
+import uuid from 'react-uuid'
 
 export default function Table() {
   // current category
   const [currentCategory, setCurrentCategory] = useState('Food')
   const { table } = useSelector((state) => state.tables)
   const { categories } = useSelector((state) => state.categories)
+  const [total, setTotal] = useState(0)
+  let price = 0
 
-  const [ordersUI, setOrdersUI] = useState(() => [])
+  const { order, isError, isSuccess, isLoading, message } = useSelector(
+    (state) => state.orders
+  )
+  const [ordersUI, setOrdersUI] = useState([])
+  const [currentOrder, setCurrentOrder] = useState([])
   const { name } = useParams()
-
+  const id = table._id
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  console.log('message', message, 'Error: ', isError)
 
   useEffect(() => {
     dispatch(getCategories())
     dispatch(getTable({ name: name }))
-  }, [dispatch])
 
+    price = 0
+  }, [dispatch, name])
+
+  useEffect(() => {
+    if (id !== undefined) {
+      dispatch(getOrders(id))
+    }
+  }, [dispatch, id])
+
+  useEffect(() => {
+    if (isSuccess) {
+      if (order.table === id) setOrdersUI(order.orders)
+      else setOrdersUI([])
+    }
+  }, [order, id])
+
+  console.log('orders: ', ordersUI)
   // set current category
   const changeCategory = (c) => {
     setCurrentCategory((prev) => c.name)
@@ -56,81 +92,58 @@ export default function Table() {
     // [
     //   {id, name, qty, price}
     // ]
-    const item = ordersUI.filter((order) => order.name === product.name)
-
-    if (item.length > 0) {
-      setOrdersUI((prev) =>
-        prev.map((order) => {
-          return order.name === product.name
-            ? {
-                ...order,
-                qty: order.qty + 1,
-                price: (order.qty + 1) * product.price,
-              }
-            : order
-        })
-      )
-    } else {
-      setOrdersUI((prev) => [
-        ...prev,
-        {
-          id: product._id,
-          name: product.name,
-          qty: 1,
-          price: product.price,
-        },
-      ])
-    }
-
-    // const item = ordersUI.filter((order) => order.orders.name === product.name)
-    // if (item.length > 0) {
-    //   setOrdersUI((prev) =>
-    //     prev.map((order) => {
-    //       return order.orders.id === product._id
-    //         ? {
-    //             orders: {
-    //               id: product._id,
-    //               name: product.name,
-    //               qty: order.orders.qty + 1,
-    //               price: (order.orders.qty + 1) * product.price,
-    //             },
-    //           }
-    //         : order
-    //     })
-    //   )
-    // } else {
-    //   setOrderlesUI((prev) => [
-    //     ...prev,
-    //     {
-    //       orders: {
-    //         id: product._id,
-    //         name: product.name,
-    //         qty: 1,
-    //         price: product.price,
-    //       },
-    //     },
-    //   ])
-    // }
+    setCurrentOrder((prev) => [
+      ...prev,
+      {
+        id: product._id,
+        order_id: uuid(),
+        name: product.name,
+        qty: 1,
+        price: product.price,
+      },
+    ])
   }
 
   const createOrderUI = (orders) => {
     if (orders.length > 0) {
-      dispatch(createOrder({ table: table._id, orders: orders }))
-      dispatch(openTable(table._id))
-      navigate('/')
+      if (ordersUI.length > 0) {
+        console.log({ id: order._id, orders: orders })
+        // dispatch(updateOrder(order._id, currentOrder))
+        dispatch(
+          updateOrder({ id: order._id, orders: ordersUI.concat(orders) })
+        )
+        navigate('/')
+      } else {
+        console.log('created')
+        dispatch(
+          createOrder({
+            table: table._id,
+            user: user._id,
+            orders: currentOrder,
+          })
+        )
+        dispatch(openTable(table._id))
+        navigate('/')
+      }
     } else {
       toast.error('Nuk keni shtuar asnje produkt')
     }
+    console.log('concated: ', ordersUI.concat(currentOrder))
   }
-
   const closeOrderUI = (id) => {
     dispatch(closeTable(id))
     navigate('/')
   }
 
   const deleteItem = (id) => {
-    setOrdersUI((prev) => ordersUI.filter((order) => order.orders.id !== id))
+    setCurrentOrder((prev) => prev.filter((order) => order.order_id !== id))
   }
+
+  const totalPrice = ordersUI.map((order) => (price += order.price))
+
+  const addCurrentOrderPrice = currentOrder.map(
+    (order) => (price += order.price)
+  )
 
   return (
     <div className="md:mx-10 md:my-10 font-space-grotesk">
@@ -150,13 +163,21 @@ export default function Table() {
             Tavolina: {table.name}
           </p>
 
-          <TableData
-            key={table._id}
-            table={table}
-            deleteItem={deleteItem}
-            ordersUI={ordersUI}
-          />
-
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <TableData
+              key={table._id}
+              currentOrder={currentOrder}
+              deleteItem={deleteItem}
+              ordersUI={ordersUI}
+            />
+          )}
+          <div className="flex justify-end py-2">
+            <span className="w-40 text-center bg-secondary font-bold text-xl py-2">
+              {price} &euro;
+            </span>
+          </div>
           <div className="flex flex-row my-5 justify-around">
             <Button
               title="Porosite"
@@ -166,7 +187,7 @@ export default function Table() {
                   ? 'bg-secondary text-white'
                   : 'bg-tableOff text-white'
               }
-              obj={ordersUI}
+              obj={currentOrder}
               action={createOrderUI}
             />
             <Button
