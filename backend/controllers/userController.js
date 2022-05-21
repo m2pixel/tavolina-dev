@@ -96,6 +96,17 @@ const getMe = asyncHandler(async (req, res) => {
   res.status(200).json(req.user)
 })
 
+const getUser = asyncHandler(async (req, res) => {
+  const user = await User.find({ _id: req.params.id })
+
+  if (!user) {
+    res.status(400)
+    throw new Error('User not found.')
+  }
+
+  res.status(200).json(user)
+})
+
 // @desc    Delete user
 // @route   DELETE /api/users/:id
 // @access  Private
@@ -120,6 +131,7 @@ module.exports = {
   registerUser,
   loginUser,
   getUsers,
+  getUser,
   getMe,
   deleteUser,
 }

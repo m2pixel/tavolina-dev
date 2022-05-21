@@ -190,7 +190,9 @@ export const tableSlice = createSlice({
       .addCase(openTable.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.table = action.payload
+        state.tables = state.tables.map((table) => {
+          return table._id === action.payload._id ? action.payload : table
+        })
       })
       .addCase(openTable.rejected, (state, action) => {
         state.isLoading = false

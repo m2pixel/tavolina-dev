@@ -4,6 +4,7 @@ const {
   registerUser,
   loginUser,
   getUsers,
+  getUser,
   getMe,
   deleteUser,
 } = require('../controllers/userController')
@@ -13,6 +14,7 @@ router.post('/', protect, registerUser)
 router.get('/', protect, getUsers)
 router.post('/login', loginUser)
 router.get('/me', protect, getMe)
+router.get('/:id', getUser)
 router.delete('/:id', deleteUser)
 
 module.exports = router

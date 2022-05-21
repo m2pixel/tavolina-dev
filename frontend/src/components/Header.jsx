@@ -13,8 +13,15 @@ import NavigateIcons from './NavigateIcons'
 function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
   const { user } = useSelector((state) => state.auth)
   const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'admin') setIsAdmin((prev) => true)
+    }
+  }, [user])
 
   const onLogout = () => {
     dispatch(logout())
@@ -22,12 +29,6 @@ function Header() {
     setIsAdmin((prev) => false)
     navigate('/')
   }
-
-  useEffect(() => {
-    if (user) {
-      if (user.role === 'admin') setIsAdmin((prev) => !prev)
-    }
-  }, [user])
 
   return (
     <>
@@ -39,7 +40,7 @@ function Header() {
                 <FaHouseUser />
               </Link>
             </div>
-            <div>{isAdmin && <NavigateIcons />}</div>
+            {isAdmin && <NavigateIcons />}
             <ul className="flex items-center space-x-3 ">
               <li className="font-bold text-xl md:text-4xl hover:text-secondary">
                 <FaSignOutAlt onClick={onLogout} />

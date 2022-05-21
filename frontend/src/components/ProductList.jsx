@@ -24,8 +24,13 @@ export default function ProductList({ category, add }) {
         title={product.name}
         obj={product}
         action={add}
+        buttonStyle="bg-dark underline underline-offset-8 decoration-secondary text-white hover:text-secondary"
       />
     )
   })
-  return <div className="my-2 mx-2 shadow">{showProducts}</div>
+  return (
+    <div className="flex flex-wrap gap-2 justify-between h-fit px-2">
+      {showProducts}
+    </div>
+  )
 }

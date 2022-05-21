@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Icon from './Icon'
 
@@ -38,8 +38,8 @@ export default function NavigateIcons() {
     { id: 5, name: 'Shift', url: 'shift', clicked: false, icon: faClock },
     {
       id: 6,
-      name: 'Calendar',
-      url: 'calendar',
+      name: 'Reports',
+      url: 'reports',
       clicked: false,
       icon: faCalendarDays,
     },

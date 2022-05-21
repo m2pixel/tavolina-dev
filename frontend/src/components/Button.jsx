@@ -4,8 +4,8 @@ import { bindActionCreators } from '@reduxjs/toolkit'
 
 export default function Button(props) {
   const style = !props.buttonStyle
-    ? 'py-5 underline underline-offset-8 decoration-primary w-fit px-5 bg-dark text-white font-medium text-xl rounded shadow-xl hover:text-primary'
-    : `${props.buttonStyle} py-5 px-5 font-medium text-xl rounded shadow-xl`
+    ? 'underline underline-offset-8 decoration-primary w-fit bg-dark text-white hover:text-primary py-5 px-5 text-xl rounded shadow-xl'
+    : `${props.buttonStyle} py-5 px-5 text-xl rounded shadow-xl`
 
   return (
     <button
@@ -16,7 +16,7 @@ export default function Button(props) {
     >
       {props.title}{' '}
       {props.icon != null && (
-        <FontAwesomeIcon className="text-primary pl-3" icon={props.icon} />
+        <FontAwesomeIcon className="text-white pl-2" icon={props.icon} />
       )}
     </button>
   )

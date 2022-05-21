@@ -3,7 +3,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'space-grotesk': ['"Space Grotesk"', 'sans-serif'],
+        'space-grotesk': ['Roboto', 'sans-serif'],
       },
       colors: {
         primary: '#EB5E28',

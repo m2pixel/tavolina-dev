@@ -26,6 +26,18 @@ const getUsers = async (token) => {
   return response.data
 }
 
+// get users
+const getUser = async (userId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.get(API_URL + userId, config)
+  return response.data
+}
+
 // update user
 const updateUser = async (userId, token) => {}
 
@@ -44,6 +56,7 @@ const deleteUser = async (userId, token) => {
 const userService = {
   createUser,
   getUsers,
+  getUser,
   deleteUser,
   updateUser,
 }

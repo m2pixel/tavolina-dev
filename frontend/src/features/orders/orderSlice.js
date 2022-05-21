@@ -59,6 +59,7 @@ export const updateOrder = createAsyncThunk(
       const message =
         (error.response &&
           error.response.data &&
+          
           error.response.data.message) ||
         error.message ||
         error.toString()
@@ -107,7 +108,6 @@ export const orderSlice = createSlice({
       .addCase(updateOrder.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.message = 'success'
         state.order = action.payload
       })
       .addCase(updateOrder.rejected, (state, action) => {
