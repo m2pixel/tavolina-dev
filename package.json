@@ -1,5 +1,5 @@
 {
-  "name": "ResMNG",
+  "name": "resmng",
   "version": "1.0.0",
   "description": "Restaurant manager",
   "main": "server.js",
