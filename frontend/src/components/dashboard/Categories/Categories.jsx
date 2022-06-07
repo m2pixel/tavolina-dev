@@ -43,7 +43,7 @@ export default function Tables() {
 
   const categoriesItems = categories.map((category) => {
     return (
-      <tr className="border-b">
+      <tr className="border-b" key={category._id}>
         <td className="px-6 py-4 text-sm text-dark ">{category.name}</td>
         <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
           <button className="bg-secondary text-white px-2 py-1 rounded">

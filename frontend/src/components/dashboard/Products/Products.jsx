@@ -46,7 +46,7 @@ export default function Products() {
   const productItems = products.map((product) => {
     return (
       <ProductItem
-        key={product.id}
+        key={product._id}
         product={product}
         deleteProduct={deleteProductUI}
       />

@@ -16,6 +16,7 @@ function Header() {
 
   const { user } = useSelector((state) => state.auth)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [resetNav, setResetNav] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -27,7 +28,11 @@ function Header() {
     dispatch(logout())
     dispatch(reset())
     setIsAdmin((prev) => false)
-    navigate('/')
+    navigate('/login')
+  }
+
+  const resetToggle = () => {
+    setResetNav((prev) => false)
   }
 
   return (
@@ -37,10 +42,17 @@ function Header() {
           <div className="flex flex-row justify-between mx-5 text-primary">
             <div className="flex items-center font-bold text-xl md:text-4xl hover:text-secondary">
               <Link to="/">
-                <FaHouseUser />
+                {/* <FaHouseUser onClick={() => setResetNav((prev) => true)} /> */}
+                <img
+                  src="60x40.png"
+                  alt="Tavolina"
+                  onClick={() => setResetNav((prev) => true)}
+                />
               </Link>
             </div>
-            {isAdmin && <NavigateIcons />}
+            {isAdmin && (
+              <NavigateIcons resetNav={resetNav} resetToggle={resetToggle} />
+            )}
             <ul className="flex items-center space-x-3 ">
               <li className="font-bold text-xl md:text-4xl hover:text-secondary">
                 <FaSignOutAlt onClick={onLogout} />

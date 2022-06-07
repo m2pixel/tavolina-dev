@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   getShifts,
   closeShift,
   reset,
 } from '../../../features/shifts/shiftSlice'
+import { getUsers } from '../../../features/users/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import Spinner from '../../Spinner'
 import ShiftItem from './ShiftItem'
@@ -15,15 +16,17 @@ export default function Shift() {
   const { shifts, isLoading, message, isError, isSuccess } = useSelector(
     (state) => state.shifts
   )
+  // const [user, setUser] = useState({ name: '' })
+  const { users } = useSelector((state) => state.users)
 
   useEffect(() => {
     dispatch(getShifts())
-
+    dispatch(getUsers())
     return () => {
       dispatch(reset())
     }
   }, [dispatch])
-
+  // console.log(users)
   const close = (id) => {
     dispatch(closeShift(id))
 
@@ -35,7 +38,14 @@ export default function Shift() {
   }
 
   const shiftList = shifts?.map((shift) => {
-    return <ShiftItem key={shift._id} shift={shift} close={close} />
+    let name = ''
+    users.map((user) => {
+      if (shift.user === user._id) {
+        name = user.name
+      }
+      return name
+    })
+    return <ShiftItem key={shift._id} shift={shift} user={name} close={close} />
   })
 
   return (

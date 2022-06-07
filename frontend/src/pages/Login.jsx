@@ -61,7 +61,8 @@ function Login() {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen">
-      <section className="text-center space-y-2">
+      <section className="flex flex-col items-center space-y-5">
+        <img src="/128x128.png" />
         <h2 className="text-2xl font-semibold text-primary">Log in</h2>
         <p className="text-sm">
           Enter your email address and password to log in.

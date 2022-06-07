@@ -15,6 +15,7 @@ import {
   createOrder,
   getOrders,
   updateOrder,
+  resetOrder,
 } from '../features/orders/orderSlice'
 import { toast } from 'react-toastify'
 import {
@@ -29,14 +30,16 @@ import uuid from 'react-uuid'
 
 export default function Table() {
   // current category
-  const [currentCategory, setCurrentCategory] = useState('Food')
+  const [currentCategory, setCurrentCategory] = useState('')
   const { table } = useSelector((state) => state.tables)
-  const { categories } = useSelector((state) => state.categories)
-  const { shift, message, isError } = useSelector((state) => state.shifts)
+  const categories = useSelector((state) => state.categories)
+  const { shift, isError } = useSelector((state) => state.shifts)
   const [total, setTotal] = useState(0)
   let price = 0
 
-  const { order, isSuccess, isLoading } = useSelector((state) => state.orders)
+  const { order, isSuccess, isLoading, message } = useSelector(
+    (state) => state.orders
+  )
   const [ordersUI, setOrdersUI] = useState([])
   const [currentOrder, setCurrentOrder] = useState([])
   const { name } = useParams()
@@ -49,6 +52,7 @@ export default function Table() {
     dispatch(getCategories())
     dispatch(getTable({ name: name }))
     dispatch(getShift(user._id))
+
     price = 0
   }, [dispatch, name])
 
@@ -63,7 +67,17 @@ export default function Table() {
       if (order.table === id) setOrdersUI(order.orders)
       else setOrdersUI([])
     }
-  }, [order, id, isSuccess])
+
+    /**
+     * nese lista e kategorive e shte me e madhe se 0
+     * dhe currentCategory eshte e zbrazet
+     * initializo currentCategory me emrin e kategoris e cila
+     * gjendet para ne liste
+     **/
+    if (categories.categories.length > 0 && currentCategory === '') {
+      setCurrentCategory((prev) => categories.categories[0].name)
+    }
+  }, [order, id, isSuccess, categories.isSuccess])
 
   // set current category
   const changeCategory = (c) => {
@@ -71,7 +85,7 @@ export default function Table() {
   }
 
   // show categories
-  const showCategories = categories.map((category) => {
+  const showCategories = categories.categories.map((category) => {
     return (
       <Button
         key={category._id}
@@ -131,10 +145,12 @@ export default function Table() {
       toast.error('Nuk keni shtuar asnje produkt')
     }
   }
+
   const closeOrderUI = (id) => {
     if (ordersUI.length > 0) {
       dispatch(closeTable(id))
       dispatch(pushOrder({ id: shift._id, order: order._id }))
+      dispatch(resetOrder())
       localStorage.removeItem(table._id)
       navigate('/')
     } else {
@@ -156,11 +172,11 @@ export default function Table() {
     <div className="md:mx-10 md:my-10 font-space-grotesk">
       <div className="flex flex-col space-x-2 md:flex-row">
         <div className="w-full h-fit md:w-2/3">
-          <div className="flex flex-col space-y-2">
-            <div className="flex flex-row justify-between bg-layerBg p-2">
+          <div className="flex flex-col space-y-6">
+            <div className="flex flex-row justify-between bg-primary bg-opacity-20 p-2 rounded">
               {showCategories}
             </div>
-            <div className="bg-layerBg">
+            <div className="bg-secondary bg-opacity-20 rounded">
               <ProductList add={addItem} category={currentCategory} />
             </div>
           </div>
@@ -182,7 +198,7 @@ export default function Table() {
           )}
           <div className="flex justify-end py-2 mx-2">
             <span className="w-40 text-center bg-tableOn font-bold text-xl py-2">
-              {price} &euro;
+              {price.toFixed(2)} &euro;
             </span>
           </div>
           <div className="flex flex-col justify-center mx-2">

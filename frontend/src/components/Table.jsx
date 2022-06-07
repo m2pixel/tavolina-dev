@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 export default function Table({ table, user }) {
-  const [lastOrder, setLastOrder] = useState({})
+  const [lastOrder, setLastOrder] = useState({ name: '', total: 0 })
   useEffect(() => {
     const item = JSON.parse(localStorage.getItem(table._id))
 
@@ -9,6 +9,7 @@ export default function Table({ table, user }) {
       setLastOrder(item)
     }
   }, [table._id])
+
   const { name, total } = lastOrder
 
   const style = table.opened
@@ -19,7 +20,9 @@ export default function Table({ table, user }) {
     <div className={style}>
       <div className="flex flex-col space-y-4">
         <p className="text-2xl underline underline-offset-2">{table.name}</p>
-        {table.opened && <p className="text-4xl font-medium">{total} &euro;</p>}
+        {table.opened && (
+          <p className="text-4xl font-medium">{total.toFixed(2)} &euro;</p>
+        )}
         {table.opened && <p className="underline underline-offset-4">{name}</p>}
         {table.opened && <p>{user.name}</p>}
       </div>

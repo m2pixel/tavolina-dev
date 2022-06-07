@@ -29,7 +29,7 @@ export default function ProductList({ category, add }) {
     )
   })
   return (
-    <div className="flex flex-wrap gap-2 justify-between h-fit px-2">
+    <div className="flex flex-wrap gap-2 justify-between h-fit px-2 py-2">
       {showProducts}
     </div>
   )

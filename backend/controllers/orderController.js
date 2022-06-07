@@ -15,6 +15,7 @@ const createOrder = asyncHandler(async (req, res) => {
     table: req.body.table,
     user: req.user.id,
     orders: req.body.orders,
+    paid: req.body.paid ? true : false,
   })
 
   res.status(200).json(order)

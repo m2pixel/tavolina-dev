@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Icon from './Icon'
 
@@ -11,7 +11,7 @@ import {
   faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons'
 
-export default function NavigateIcons() {
+export default function NavigateIcons({ resetNav, resetToggle }) {
   const [nav, setNav] = useState([
     { id: 1, name: 'Users', url: 'users', clicked: false, icon: faUser },
     {
@@ -45,6 +45,13 @@ export default function NavigateIcons() {
     },
   ])
 
+  useEffect(() => {
+    if (resetNav) {
+      setNav((prev) => prev.map((n) => ({ ...n, clicked: false })))
+    }
+  }, [resetNav])
+
+  console.log(resetNav)
   const toggleNav = (id) => {
     setNav(
       nav.map((icon) =>
@@ -58,7 +65,12 @@ export default function NavigateIcons() {
   const showNav = nav.map((nav) => {
     return (
       <Link key={nav.id} to={`dashboard/${nav.url}`}>
-        <Icon key={nav.id} toggle={toggleNav} icon={nav} />
+        <Icon
+          key={nav.id}
+          toggle={toggleNav}
+          icon={nav}
+          onClick={() => resetToggle()}
+        />
       </Link>
     )
   })

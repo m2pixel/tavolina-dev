@@ -45,7 +45,7 @@ export default function Tables() {
 
   const tableItems = tables.map((table) => {
     return (
-      <TableItem key={table.id} table={table} deleteTable={deleteTableUI} />
+      <TableItem key={table._id} table={table} deleteTable={deleteTableUI} />
     )
   })
 
