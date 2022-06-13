@@ -51,10 +51,10 @@ export const getTables = createAsyncThunk(
 // Get tables
 export const getTable = createAsyncThunk(
   'tables/getOne',
-  async (tableName, thunkAPI) => {
+  async (id, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await tableService.getTable(tableName, token)
+      return await tableService.getTable(id, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -122,6 +122,24 @@ export const closeTable = createAsyncThunk(
   }
 )
 
+export const updateTable = createAsyncThunk(
+  'tables/update',
+  async (table, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token
+      return await tableService.updateTable(table.id, table.name, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const tableSlice = createSlice({
   name: 'table',
   initialState,
@@ -136,7 +154,8 @@ export const tableSlice = createSlice({
       .addCase(createTable.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.tables.push(action.payload)
+        state.message = action.payload.msg
+        state.tables.push(action.payload.table)
       })
       .addCase(createTable.rejected, (state, action) => {
         state.isLoading = false
@@ -165,6 +184,24 @@ export const tableSlice = createSlice({
         state.table = action.payload
       })
       .addCase(getTable.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(updateTable.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateTable.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.message = action.payload.msg
+        state.tables = state.tables.map((table) => {
+          return table._id === action.payload.table._id
+            ? action.payload.table
+            : table
+        })
+      })
+      .addCase(updateTable.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

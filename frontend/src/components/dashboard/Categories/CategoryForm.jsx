@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createCategory } from '../../../features/categories/categorySlice'
+import Button from '../../Button'
 
 function CategoryForm({ reload }) {
   const [name, setName] = useState('')
@@ -22,24 +23,26 @@ function CategoryForm({ reload }) {
       </p>
       <form onSubmit={onSubmit}>
         <div className="flex flex-col space-y-5">
-          <label htmlFor="text" className="font-semibold text-dark">
-            Emri
-          </label>
           <input
             type="text"
             name="text"
             id="text"
-            className="w-80 border border-primary-400 rounded py-2 px-2"
+            className="w-80 text-dark border border-dark rounded py-2 px-2"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Sheno emrin"
           />
           <button
-            className="w-80 bg-primary rounded font-bold text-sm hover:bg-secondary text-white py-3"
+            className="w-80 bg-dark rounded font-bold text-sm hover:bg-opacity-80 uppercase text-white py-3"
             type="submit"
           >
             Shto kategori
           </button>
+          <Button
+            title="Kthehu mbrapa"
+            action={() => reload()}
+            buttonStyle={6}
+          />
         </div>
       </form>
     </section>

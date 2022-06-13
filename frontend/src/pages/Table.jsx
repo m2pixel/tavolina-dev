@@ -43,14 +43,14 @@ export default function Table() {
   const [ordersUI, setOrdersUI] = useState([])
   const [currentOrder, setCurrentOrder] = useState([])
   const { name } = useParams()
-  const id = table._id
+  const { id } = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
 
   useEffect(() => {
     dispatch(getCategories())
-    dispatch(getTable({ name: name }))
+    dispatch(getTable(id))
     dispatch(getShift(user._id))
 
     price = 0
@@ -69,7 +69,7 @@ export default function Table() {
     }
 
     /**
-     * nese lista e kategorive e shte me e madhe se 0
+     * nese lista e kategorive eshte me e madhe se 0
      * dhe currentCategory eshte e zbrazet
      * initializo currentCategory me emrin e kategoris e cila
      * gjendet para ne liste
@@ -204,11 +204,7 @@ export default function Table() {
           <div className="flex flex-col justify-center mx-2">
             <Button
               title="Porosite"
-              buttonStyle={
-                currentOrder.length > 0
-                  ? 'bg-secondary text-white uppercase font-semibold md:font-medium hover:opacity-75'
-                  : 'bg-tableOff text-white uppercase font-semibold md:font-medium hover:opacity-75'
-              }
+              buttonStyle={currentOrder.length > 0 ? 2 : 3}
               obj={currentOrder}
               action={createOrderUI}
               icon={faCheckDouble}
@@ -216,7 +212,7 @@ export default function Table() {
             <span className="my-2 mx-5 border border-primary"></span>
             <Button
               title="Paguaj"
-              buttonStyle="bg-tableOff w-full text-white uppercase font-semibold md:font-medium hover:opacity-75"
+              buttonStyle={3}
               obj={table._id}
               action={closeOrderUI}
               icon={faDollarSign}
@@ -224,11 +220,7 @@ export default function Table() {
             <span className="my-2 mx-5 border border-primary"></span>
             <div className="">
               <Link to="/">
-                <Button
-                  title="Kthehu"
-                  buttonStyle="bg-tableOn w-full text-white uppercase font-semibold md:font-medium hover:opacity-75"
-                  icon={faAnglesLeft}
-                />
+                <Button title="Kthehu" buttonStyle={4} icon={faAnglesLeft} />
               </Link>
             </div>
           </div>

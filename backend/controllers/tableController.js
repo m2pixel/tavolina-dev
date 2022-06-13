@@ -14,11 +14,12 @@ const getTables = asyncHandler(async (req, res) => {
 // @route   GET /api/tables
 // @access  Private
 const getTable = asyncHandler(async (req, res) => {
-  if (!req.body.name) {
+  const table = await Table.findOne({ _id: req.params.id })
+
+  if (!table) {
     res.status(400)
-    throw new Error('Please enter table name')
+    throw new Error('Tavolina nuk eshte gjetur')
   }
-  const table = await Table.findOne({ name: req.body.name })
 
   res.status(200).json(table)
 })
@@ -29,7 +30,7 @@ const getTable = asyncHandler(async (req, res) => {
 const setTable = asyncHandler(async (req, res) => {
   if (!req.body.name) {
     res.status(400)
-    throw new Error('Please enter table name')
+    throw new Error('Sheno emrin e tavolines')
   }
 
   const table = await Table.create({
@@ -37,7 +38,7 @@ const setTable = asyncHandler(async (req, res) => {
     // user: req.user.id,
   })
 
-  res.status(200).json(table)
+  res.status(200).json({ msg: `Tavolina ${req.body.name} u shtua`, table })
 })
 
 // @desc    Update table
@@ -63,6 +64,37 @@ const closeTable = asyncHandler(async (req, res) => {
   res.status(200).json({ msg: 'table closed' })
 })
 
+// @desc    Update table
+// @route   PUT /api/table/:id
+// @access  Private
+const updateTable = asyncHandler(async (req, res) => {
+  const tableExist = await Table.findById(req.params.id)
+
+  if (!tableExist) {
+    res.status(400)
+    throw new Error('Tavolina nuk eshte gjetur')
+  }
+
+  if (!req.body.name) {
+    res.status(400)
+    throw new Error('Emri nuk duhet te jete i zbrazet')
+  }
+
+  const table = await Table.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        name: req.body.name,
+      },
+    },
+    {
+      new: true,
+    }
+  )
+
+  res.status(200).json({ msg: `Emri tavolines u ndryshua`, table })
+})
+
 // @desc    Delete table
 // @route   DELETE /api/table/:id
 // @access  Private
@@ -73,7 +105,7 @@ const deleteTable = asyncHandler(async (req, res) => {
     req.stasus(400)
     throw new Error('Table didnt deleted')
   }
-  res.status(200).json({ message: 'Table removed' })
+  res.status(200).json({ msg: 'Table removed' })
 })
 
 module.exports = {
@@ -82,5 +114,6 @@ module.exports = {
   setTable,
   openTable,
   closeTable,
+  updateTable,
   deleteTable,
 }

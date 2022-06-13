@@ -1,9 +1,4 @@
-import {
-  FaSignInAlt,
-  FaSignOutAlt,
-  FaUserPlus,
-  FaHouseUser,
-} from 'react-icons/fa'
+import { FaSignOutAlt } from 'react-icons/fa'
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -38,13 +33,13 @@ function Header() {
   return (
     <>
       {user && (
-        <header className="bg-dark py-2 md:py-4 mb-10">
+        <header className="bg-dark py-2 md:py-2 mb-10">
           <div className="flex flex-row justify-between mx-5 text-primary">
             <div className="flex items-center font-bold text-xl md:text-4xl hover:text-secondary">
               <Link to="/">
                 {/* <FaHouseUser onClick={() => setResetNav((prev) => true)} /> */}
                 <img
-                  src="60x40.png"
+                  src={process.env.PUBLIC_URL + '/logo.png'}
                   alt="Tavolina"
                   onClick={() => setResetNav((prev) => true)}
                 />

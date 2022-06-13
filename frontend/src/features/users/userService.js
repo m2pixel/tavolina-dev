@@ -39,7 +39,17 @@ const getUser = async (userId, token) => {
 }
 
 // update user
-const updateUser = async (userId, token) => {}
+const updateUser = async (userId, userData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.put(API_URL + userId, userData, config)
+
+  return response.data
+}
 
 // delete user
 const deleteUser = async (userId, token) => {

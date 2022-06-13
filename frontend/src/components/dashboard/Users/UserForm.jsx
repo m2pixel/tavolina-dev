@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createUser } from '../../../features/users/userSlice'
 import { toast } from 'react-toastify'
+import Button from '../../Button'
 
 function CategoryForm({ reload }) {
   const [formData, setFormData] = useState({
@@ -44,9 +45,10 @@ function CategoryForm({ reload }) {
   }
 
   return (
-    <div className="flex flex-col items-center pt-5">
-      <p className="text-sm pb-5">
-        Per te shtuar nje kategori te re ju lutem shenoni emrin e kategorise.
+    <div className="flex flex-col items-center justify-center pt-5">
+      <p className="w-2/3 text-sm text-center pb-5">
+        Per te shtuar nje perdorues ju duhet te plotesoni te dhenat e nevojshme
+        per perdoruesin e ri.
       </p>
 
       <section className="flex justify-center mt-5">
@@ -54,44 +56,44 @@ function CategoryForm({ reload }) {
           <div className="w-full">
             <input
               type="text"
-              className="w-full py-2 text-gray-600 px-5 border rounded"
+              className="w-full py-2 px-5 text-dark border border-dark rounded"
               id="name"
               name="name"
               value={name}
-              placeholder="Enter your name"
+              placeholder="Emri"
               onChange={onChange}
             />
           </div>
           <div className="form-group">
             <input
               type="email"
-              className="w-full py-2 text-gray-600 px-5 border rounded"
+              className="w-full py-2 px-5 text-dark border border-dark rounded"
               id="email"
               name="email"
               value={email}
-              placeholder="Enter your email"
+              placeholder="Email adresa"
               onChange={onChange}
             />
           </div>
           <div className="form-group">
             <input
               type="password"
-              className="w-full py-2 text-gray-600 px-5 border rounded"
+              className="w-full py-2 px-5 text-dark border border-dark rounded"
               id="password"
               name="password"
               value={password}
-              placeholder="Enter password"
+              placeholder="Fjalekalimi"
               onChange={onChange}
             />
           </div>
           <div className="form-group">
             <input
               type="password"
-              className="w-full py-2 text-gray-600 px-5 border rounded"
+              className="w-full py-2 px-5 text-dark border border-dark rounded"
               id="password2"
               name="password2"
               value={password2}
-              placeholder="Confirm password"
+              placeholder="Perserit fjalekalimin"
               onChange={onChange}
             />
           </div>
@@ -101,21 +103,26 @@ function CategoryForm({ reload }) {
               id="role"
               value={role}
               onChange={onChange}
-              className="w-full py-2 text-gray-600 px-5 border rounded"
+              className="w-full py-2 px-5 text-dark border border-dark rounded"
             >
-              <option>Role</option>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
+              <option>Roli</option>
+              <option value="user">Kamarier</option>
+              <option value="admin">Menaxher</option>
             </select>
           </div>
-          <div className="form-group">
-            <button
-              className="w-80 bg-primary rounded font-bold text-sm hover:bg-secondary text-white py-3"
-              type="submit"
-            >
-              Shto kategori
-            </button>
-          </div>
+          <button
+            className="w-80 bg-dark rounded font-bold text-sm hover:bg-opacity-80 uppercase text-white py-3"
+            type="submit"
+          >
+            Shto perdorues
+          </button>
+          `
+          <Button
+            title="Kthehu mbrapa"
+            action={() => reload()}
+            buttonStyle={6}
+          />
+          `
         </form>
       </section>
     </div>

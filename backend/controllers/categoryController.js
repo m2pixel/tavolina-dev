@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const Category = require('../models/categoryModel')
+const Product = require('../models/productModel')
 
 // @desc    Get category
 // @route   GET /api/categories
@@ -24,35 +25,36 @@ const setCategory = asyncHandler(async (req, res) => {
     user: req.user.id,
   })
 
-  res.status(200).json(category)
+  res
+    .status(200)
+    .json({ msg: `Kategoria '${category.name}' u regjistrua.`, category })
 })
 
 // @desc    Update category
 // @route   PUT /api/categories/:id
 // @access  Private
 const updateCategory = asyncHandler(async (req, res) => {
-  const category = await Category.findById(req.params.id)
+  const prevCategory = await Category.findOne({ _id: req.params.id })
+  const category = await Category.findOneAndUpdate(
+    { _id: req.params.id },
+    { $set: { name: req.body.name } },
+    { new: true }
+  )
+
+  const updateProductsCategory = await Product.updateMany(
+    { category: prevCategory.name },
+    { $set: { category: category.name } }
+  )
 
   if (!category) {
     res.status(400)
-    throw new Error('Category not found')
+    throw new Error('Kategoria nuk eshte gjetur')
   }
 
-  // Check for user
-  if (!req.user) {
-    res.status(401)
-    throw new Error('User not found')
-  }
-
-  const updatedCategory = await Category.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
-    }
-  )
-
-  res.status(200).json(updatedCategory)
+  res.status(200).json({
+    msg: 'Kategoria eshte ndryshuar',
+    name: category.name,
+  })
 })
 
 // @desc    Delete category
@@ -74,7 +76,9 @@ const deleteCategory = asyncHandler(async (req, res) => {
 
   await category.remove()
 
-  res.status(200).json({ id: req.params.id })
+  res
+    .status(200)
+    .json({ msg: `Kategoria ${category.name} u fshi.`, id: req.params.id })
 })
 
 module.exports = {

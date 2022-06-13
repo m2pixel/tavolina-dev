@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ProductItem from './ProductItem'
 import ProductForm from './ProductForm'
+import { toast } from 'react-toastify'
 import {
   getProducts,
   deleteProduct,
@@ -10,20 +11,18 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import Spinner from '../../Spinner'
-
+import Button from '../../Button'
 export default function Products() {
   const [showForm, setShowForm] = useState(false)
-  const [msg, setMsg] = useState('')
   const dispatch = useDispatch()
   // const navigate = useNavigator()
-  const { products, isLoading, isError, message } = useSelector(
+  const { products, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.products
   )
 
   const deleteProductUI = (id) => {
     if (id) {
       dispatch(deleteProduct(id))
-      setMsg('Product deleted')
     }
   }
 
@@ -33,15 +32,17 @@ export default function Products() {
 
   useEffect(() => {
     if (isError) {
-      console.log(message)
+      toast.error(message)
+    } else if (isSuccess && message !== '') {
+      toast.success(message)
     }
 
     dispatch(getProducts())
-    setMsg((prev) => '')
+
     return () => {
       dispatch(reset())
     }
-  }, [isError, message, dispatch, msg])
+  }, [isError, message, dispatch])
 
   const productItems = products.map((product) => {
     return (
@@ -53,6 +54,9 @@ export default function Products() {
     )
   })
 
+  const toggle = () => {
+    setShowForm((prev) => true)
+  }
   return (
     <>
       {isLoading ? (
@@ -63,17 +67,16 @@ export default function Products() {
             Menaxhimi i produkteve
           </h2>
           {showForm ? (
-            <ProductForm reload={reloadAfterAddProduct} />
+            <ProductForm reload={reloadAfterAddProduct} message={message} />
           ) : (
             <div>
-              <div className="flex justify-end mx-10">
-                <div
-                  onClick={() => setShowForm((curr) => true)}
-                  className="w-36 flex items-center justify-around cursor-pointer px-2 bg-dark text-primary rounded py-1 hover:text-secondary"
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                  <p className="font-semibold">Shto produkt</p>
-                </div>
+              <div className="flex justify-end mx-5 my-5">
+                <Button
+                  title="Shto produkt"
+                  icon={faPlus}
+                  action={toggle}
+                  buttonStyle={5}
+                />
               </div>
               <div className="flex flex-col">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

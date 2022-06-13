@@ -39,7 +39,7 @@ export default function Home() {
   }
 
   const showTables = tables.map((table) => (
-    <Link key={table._id} to={`/${table.name}`}>
+    <Link key={table._id} to={`/${table._id}`}>
       <Table table={table} user={user} />
     </Link>
   ))

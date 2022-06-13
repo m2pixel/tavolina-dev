@@ -6,19 +6,19 @@ import Spinner from '../../Spinner'
 import UserForm from './UserForm'
 import UserItems from './UserItems'
 import { getUsers, deleteUser, reset } from '../../../features/users/userSlice'
+import { toast } from 'react-toastify'
+import Button from '../../Button'
 
 export default function Tables() {
   const [showForm, setShowForm] = useState(false)
-  const [msg, setMsg] = useState('')
   const dispatch = useDispatch()
-  const { users, isLoading, isError, message } = useSelector(
+  const { users, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.users
   )
 
   const deleteUserUI = (id) => {
     if (id) {
       dispatch(deleteUser(id))
-      setMsg('User deleted')
     }
   }
 
@@ -28,20 +28,25 @@ export default function Tables() {
 
   useEffect(() => {
     if (isError) {
-      console.log(message)
+      toast.error(message)
+    } else if (isSuccess && message !== '') {
+      toast.success(message)
     }
 
     dispatch(getUsers())
-    setMsg((prev) => '')
+
     return () => {
       dispatch(reset())
     }
-  }, [isError, message, dispatch, msg])
+  }, [isError, message, dispatch])
 
+  console.log(message)
   const usersItems = users.map((user) => {
     return <UserItems key={user._id} user={user} deleteUserUI={deleteUserUI} />
   })
-
+  const toggle = () => {
+    setShowForm((curr) => true)
+  }
   return (
     <>
       {isLoading ? (
@@ -55,14 +60,13 @@ export default function Tables() {
             <UserForm reload={reloadAfterAddTable} />
           ) : (
             <div>
-              <div className="flex justify-end mx-10">
-                <div
-                  onClick={() => setShowForm((curr) => true)}
-                  className="w-40 flex items-center justify-around cursor-pointer px-2 bg-dark text-primary rounded py-1 hover:text-secondary"
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                  <p className="font-semibold">Shto perdorues</p>
-                </div>
+              <div className="flex justify-end mx-5 my-5">
+                <Button
+                  title="Shto perdorues"
+                  icon={faPlus}
+                  action={toggle}
+                  buttonStyle={5}
+                />
               </div>
               <div className="flex flex-col">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

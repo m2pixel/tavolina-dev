@@ -10,6 +10,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import Spinner from '../../Spinner'
+import Button from '../../Button'
 
 export default function Tables() {
   const [showForm, setShowForm] = useState(false)
@@ -49,29 +50,29 @@ export default function Tables() {
     )
   })
 
+  const toggle = () => {
+    setShowForm((prev) => true)
+  }
   return (
     <>
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="">
-          <h2 className="flex justify-center font-semibold">
-            Menaxhimi i tavolinave
-          </h2>
+        <div className="container mx-auto">
+          <h2 className="text-center font-semibold">Menaxhimi i tavolinave</h2>
           {showForm ? (
             <TableForm reload={reloadAfterAddTable} />
           ) : (
-            <div>
-              <div className="flex justify-end mx-10">
-                <div
-                  onClick={() => setShowForm((curr) => true)}
-                  className="w-36 flex items-center justify-around cursor-pointer px-2 bg-dark text-primary rounded py-1 hover:text-secondary"
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                  <p className="font-semibold">Shto tavoline</p>
-                </div>
+            <div className="">
+              <div className="flex justify-end mx-5">
+                <Button
+                  title="Shto Tavoline"
+                  icon={faPlus}
+                  action={toggle}
+                  buttonStyle={5}
+                />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col items-center">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                     <div className="overflow-hidden">

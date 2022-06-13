@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Link } from 'react-router-dom'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { toast } from 'react-toastify'
 import Spinner from '../../Spinner'
+import Button from '../../Button'
 import CategoryForm from './CategoryForm'
 import {
   getCategories,
@@ -12,43 +14,44 @@ import {
 
 export default function Tables() {
   const [showForm, setShowForm] = useState(false)
-  const [msg, setMsg] = useState('')
   const dispatch = useDispatch()
-  const { categories, isLoading, isError, message } = useSelector(
+  const { categories, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.categories
   )
 
   const deleteTableUI = (id) => {
     if (id) {
       dispatch(deleteCategory(id))
-      setMsg('Table deleted')
     }
   }
 
   const reloadAfterAddTable = () => {
     setShowForm((prev) => false)
   }
-
+  console.log('msg: ', message)
   useEffect(() => {
     if (isError) {
-      console.log(message)
+      toast.error(message)
+    } else if (isSuccess && message !== '') {
+      toast.success(message)
     }
 
     dispatch(getCategories())
-    setMsg((prev) => '')
     return () => {
       dispatch(reset())
     }
-  }, [isError, message, dispatch, msg])
+  }, [isError, message, dispatch])
 
   const categoriesItems = categories.map((category) => {
     return (
       <tr className="border-b" key={category._id}>
         <td className="px-6 py-4 text-sm text-dark ">{category.name}</td>
         <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
-          <button className="bg-secondary text-white px-2 py-1 rounded">
-            Edit
-          </button>
+          <Link to={`/dashboard/category/${category._id}`}>
+            <button className="bg-secondary text-white px-2 py-1 rounded">
+              Edit
+            </button>
+          </Link>
         </td>
         <td className="text-sm text-dark  font-light px-6 py-4">
           <button
@@ -61,6 +64,10 @@ export default function Tables() {
       </tr>
     )
   })
+
+  const toggle = () => {
+    setShowForm((curr) => true)
+  }
 
   return (
     <>
@@ -75,14 +82,13 @@ export default function Tables() {
             <CategoryForm reload={reloadAfterAddTable} />
           ) : (
             <div>
-              <div className="flex justify-end mx-10">
-                <div
-                  onClick={() => setShowForm((curr) => true)}
-                  className="w-36 flex items-center justify-around cursor-pointer px-2 bg-dark text-primary rounded py-1 hover:text-secondary"
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                  <p className="font-semibold">Shto kategori</p>
-                </div>
+              <div className="flex justify-end mx-5 my-5">
+                <Button
+                  title="Shto kategori"
+                  icon={faPlus}
+                  action={toggle}
+                  buttonStyle={5}
+                />
               </div>
               <div className="flex flex-col">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

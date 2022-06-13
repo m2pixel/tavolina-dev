@@ -27,22 +27,20 @@ const getTables = async (token) => {
 
   return response.data
 }
-
-// get table by id
-// Get user tables
-const getTable = async (tableName, token) => {
+// Get table
+const getTable = async (id, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }
 
-  const response = await axios.post(API_URL + tableName, tableName, config)
+  const response = await axios.get(API_URL + id, config)
 
   return response.data
 }
 
-// Delete user table
+// Delete table
 const deleteTable = async (tableId, token) => {
   const config = {
     headers: {
@@ -51,6 +49,19 @@ const deleteTable = async (tableId, token) => {
   }
 
   const response = await axios.delete(API_URL + tableId, config)
+
+  return response.data
+}
+
+// update table
+const updateTable = async (tableId, name, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.put(API_URL + tableId, name, config)
 
   return response.data
 }
@@ -83,6 +94,7 @@ const tableService = {
   createTable,
   getTables,
   getTable,
+  updateTable,
   deleteTable,
   openTable,
   closeTable,

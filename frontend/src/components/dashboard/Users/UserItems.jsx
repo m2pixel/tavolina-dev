@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function UserItems({ user, deleteUserUI }) {
   return (
@@ -17,9 +18,11 @@ export default function UserItems({ user, deleteUserUI }) {
         </span>
       </td>
       <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
-        <button className="bg-secondary text-white px-2 py-1 rounded font-semibold">
-          Edit
-        </button>
+        <Link to={`/dashboard/users/${user._id}`}>
+          <button className="bg-secondary text-white px-2 py-1 rounded font-semibold">
+            Edit
+          </button>
+        </Link>
       </td>
       <td className="text-sm text-dark  font-light px-6 py-4">
         <button

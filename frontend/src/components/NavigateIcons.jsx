@@ -9,10 +9,18 @@ import {
   faBurger,
   faClock,
   faCalendarDays,
+  faHouse,
 } from '@fortawesome/free-solid-svg-icons'
 
 export default function NavigateIcons({ resetNav, resetToggle }) {
   const [nav, setNav] = useState([
+    {
+      id: 0,
+      name: 'Dashboard',
+      url: '',
+      clicked: false,
+      icon: faHouse,
+    },
     { id: 1, name: 'Users', url: 'users', clicked: false, icon: faUser },
     {
       id: 2,
@@ -51,7 +59,6 @@ export default function NavigateIcons({ resetNav, resetToggle }) {
     }
   }, [resetNav])
 
-  console.log(resetNav)
   const toggleNav = (id) => {
     setNav(
       nav.map((icon) =>

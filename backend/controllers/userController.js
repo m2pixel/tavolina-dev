@@ -23,7 +23,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (userExists) {
     res.status(400)
-    throw new Error('User already exists')
+    throw new Error('Ky perdorues egziston ne databaze')
   }
 
   // Hash password
@@ -40,16 +40,21 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (user) {
     res.status(201).json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user._id),
+      user: {
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        token: generateToken(user._id),
+      },
+      msg: 'Perdoruesi u regjistrua me sukses',
     })
   } else {
     res.status(400)
     throw new Error('Invalid user data')
   }
+
+  // res.status(200).json({ msg: 'Perdoruesi u regjistrua me sukses' })
 })
 
 // @desc     Get users
@@ -114,10 +119,62 @@ const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findByIdAndDelete(req.params.id)
 
   if (!user) {
-    req.stasus(400)
+    res.stasus(400)
     throw new Error('user didnt deleted')
   }
-  res.status(200).json({ message: 'User removed' })
+  res.status(200).json({ msg: 'Perdoruesi u fshi me sukses' })
+})
+
+const updateUser = asyncHandler(async (req, res) => {
+  if (req.body.password !== '') {
+    // Hash password
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(req.body.password, salt)
+
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: { password: hashedPassword },
+      },
+      { new: true }
+    )
+
+    if (!user) {
+      res.status(400)
+      throw new Error('Gabim: Te dhenat nuk jane ndryshuar')
+    }
+
+    res.status(200).json({
+      msg: 'Fjalekalimi eshte ndryshuar',
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    })
+  } else {
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          name: req.body.name,
+          email: req.body.email,
+          role: req.body.role,
+        },
+      },
+      { new: true }
+    )
+
+    if (!user) {
+      res.status(400)
+      throw new Error('Gabim: Te dhenat nuk jane ndryshuar')
+    }
+
+    res.status(200).json({
+      msg: 'Te dhenat jane ndryshuar',
+      name: req.body.name,
+      email: req.body.email,
+      role: req.body.role,
+    })
+  }
 })
 
 // Generate JWT
@@ -134,4 +191,5 @@ module.exports = {
   getUser,
   getMe,
   deleteUser,
+  updateUser,
 }

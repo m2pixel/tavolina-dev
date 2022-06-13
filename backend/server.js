@@ -19,6 +19,7 @@ app.use('/api/products', require('./routes/productRoutes'))
 app.use('/api/orders', require('./routes/orderRoutes'))
 app.use('/api/shifts', require('./routes/shiftRoutes'))
 app.use('/api/records', require('./routes/recordRoutes'))
+app.use('/api/dashboard', require('./routes/dashboardRoutes'))
 
 // Serve frontend
 if (process.env.NODE_ENV === 'production') {

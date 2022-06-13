@@ -28,6 +28,32 @@ const getProducts = async (token) => {
   return response.data
 }
 
+// Get product
+const getProduct = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.get(API_URL + id, config)
+
+  return response.data
+}
+
+// update product
+const updateProduct = async (id, product, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.put(API_URL + id, product, config)
+
+  return response.data
+}
+
 // Delete user product
 const deleteProduct = async (productId, token) => {
   const config = {
@@ -44,6 +70,8 @@ const deleteProduct = async (productId, token) => {
 const productService = {
   createProduct,
   getProducts,
+  getProduct,
+  updateProduct,
   deleteProduct,
 }
 

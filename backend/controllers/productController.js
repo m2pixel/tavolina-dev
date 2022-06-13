@@ -10,6 +10,20 @@ const getProducts = asyncHandler(async (req, res) => {
   res.status(200).json(products)
 })
 
+// @desc    Get product
+// @route   GET /api/products/:id
+// @access  Private
+const getProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findOne({ _id: req.params.id })
+
+  if (!product) {
+    res.status(400)
+    throw new Error('Produkti nuk eshte gjetur')
+  }
+
+  res.status(200).json(product)
+})
+
 // @desc    Set product
 // @route   POST /api/products
 // @access  Private
@@ -25,23 +39,35 @@ const setProduct = asyncHandler(async (req, res) => {
     category: req.body.category,
   })
 
-  res.status(200).json(product)
+  res.status(200).json({ msg: 'Produkti u shtua', product })
 })
 
 // @desc    Update product
 // @route   PUT /api/products/:id
 // @access  Private
 const updateProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id)
+  const productExist = await Product.findById(req.params.id)
 
-  if (!product) {
+  if (!productExist) {
     res.status(400)
-    throw new Error('Product not found')
+    throw new Error('Produkti nuk eshte gjetur')
   }
 
-  await Product.findOneAndUpdate(req.params.id, req.body, { new: true })
+  const product = await Product.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        name: req.body.name,
+        price: req.body.price,
+        category: req.body.category,
+      },
+    },
+    {
+      new: true,
+    }
+  )
 
-  res.status(200).json({ message: `Product ${req.params.id} updated` })
+  res.status(200).json({ msg: `Produkti u ndryshua`, product })
 })
 
 // @desc    Delete product
@@ -59,6 +85,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 module.exports = {
   getProducts,
+  getProduct,
   setProduct,
   updateProduct,
   deleteProduct,

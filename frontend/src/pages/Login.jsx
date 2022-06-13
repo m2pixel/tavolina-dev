@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { login, reset } from '../features/auth/authSlice'
+import Button from '../components/Button'
 import Spinner from '../components/Spinner'
 
 function Login() {
@@ -55,55 +56,60 @@ function Login() {
     dispatch(login(userData))
   }
 
-  if (isLoading) {
-    return <Spinner />
-  }
-
   return (
-    <div className="flex flex-col justify-center items-center h-screen">
-      <section className="flex flex-col items-center space-y-5">
-        <img src="/128x128.png" />
-        <h2 className="text-2xl font-semibold text-primary">Log in</h2>
-        <p className="text-sm">
-          Enter your email address and password to log in.
-        </p>
-      </section>
-
-      <section className="flex justify-center mt-5">
-        <form className="space-y-3" onSubmit={onSubmit}>
-          <div className="form-group">
-            <input
-              type="email"
-              className="w-full py-2 text-gray-600 px-5 border rounded"
-              id="email"
-              name="email"
-              value={email}
-              placeholder="Enter your email"
-              onChange={onChange}
+    <div className="flex flex-col justify-center items-center h-screen bg-layerBg">
+      <div className="bg-white py-5 px-5 rounded-2xl shadow-xl">
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <section className="flex flex-col items-center space-y-5">
+            <img
+              src="/logo-128x84.png"
+              width="128"
+              height="84"
+              alt="Tavolina"
             />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              className="w-full py-2 text-gray-600 px-5 border rounded"
-              id="password"
-              name="password"
-              value={password}
-              placeholder="Enter password"
-              onChange={onChange}
-            />
-          </div>
+            <h2 className="text-2xl font-semibold text-dark">Log in</h2>
+            <p className="text-sm">Sheno email adresen dhe fjalekalimin</p>
+          </section>
+        )}
 
-          <div className="form-group">
-            <button
-              type="submit"
-              className="w-full py-2 bg-primary font-semibold text-dark px-5 rounded"
-            >
-              Log in
-            </button>
-          </div>
-        </form>
-      </section>
+        <section className="flex justify-center my-5">
+          <form className="space-y-3" onSubmit={onSubmit}>
+            <div className="form-group">
+              <input
+                type="email"
+                className="w-full py-2 px-5 text-dark placeholder-dark border border-dark text-center rounded"
+                id="email"
+                name="email"
+                value={email}
+                placeholder="Email adresa"
+                onChange={onChange}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                className="w-full py-2 px-5 text-dark placeholder-dark border border-dark text-center rounded"
+                id="password"
+                name="password"
+                value={password}
+                placeholder="Fjalekalimi"
+                onChange={onChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <button
+                type="submit"
+                className="w-80 bg-tableOff cursor-pointer rounded font-bold text-sm hover:opacity-80 uppercase text-white py-3 px-2 text-center"
+              >
+                Kyçu
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
     </div>
   )
 }
