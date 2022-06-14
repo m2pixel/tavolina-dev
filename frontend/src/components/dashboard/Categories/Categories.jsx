@@ -74,7 +74,7 @@ export default function Tables() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="">
+        <div className="container mx-auto">
           <h2 className="flex justify-center font-semibold">
             Menaxhimi i kategorive
           </h2>

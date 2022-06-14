@@ -64,7 +64,7 @@ export default function Tables() {
             <TableForm reload={reloadAfterAddTable} />
           ) : (
             <div className="">
-              <div className="flex justify-end mx-5">
+              <div className="flex justify-end mx-5 my-5">
                 <Button
                   title="Shto Tavoline"
                   icon={faPlus}

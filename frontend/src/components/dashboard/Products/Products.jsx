@@ -62,7 +62,7 @@ export default function Products() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="">
+        <div className="container mx-auto">
           <h2 className="flex justify-center font-semibold">
             Menaxhimi i produkteve
           </h2>

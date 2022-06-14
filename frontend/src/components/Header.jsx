@@ -34,8 +34,8 @@ function Header() {
     <>
       {user && (
         <header className="bg-dark py-2 md:py-2 mb-10">
-          <div className="flex flex-row justify-between mx-5 text-primary">
-            <div className="flex items-center font-bold text-xl md:text-4xl hover:text-secondary">
+          <div className="container mx-auto flex flex-row justify-between text-primary">
+            <div className="flex items-center md:text-4xl hover:text-secondary">
               <Link to="/">
                 {/* <FaHouseUser onClick={() => setResetNav((prev) => true)} /> */}
                 <img
