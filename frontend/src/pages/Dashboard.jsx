@@ -41,10 +41,9 @@ function Dashboard() {
   }
 
   const initialOrders = orders?.map((order) => {
-    console.log(order)
     return order?.map((o) => {
       return (
-        <tr className="text-xs md:text-sm  bg-white border-b">
+        <tr key={o.order_id} className="text-xs md:text-sm  bg-white border-b">
           <th
             scope="row"
             className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
@@ -74,10 +73,9 @@ function Dashboard() {
     })
   })
 
-  console.log('initial: ', initialOrders)
   const initialRecords = records?.map((record) => {
     return (
-      <tr className="text-xs md:text-sm  bg-white border-b">
+      <tr key={record._id} className="text-xs md:text-sm  bg-white border-b">
         <th
           scope="row"
           className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"

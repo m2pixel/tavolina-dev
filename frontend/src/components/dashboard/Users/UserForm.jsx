@@ -23,7 +23,6 @@ function CategoryForm({ reload }) {
     dispatch(getRoles())
   }, [dispatch])
 
-  console.log('roles', roles, 'message', message)
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,

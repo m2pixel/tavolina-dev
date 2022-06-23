@@ -84,7 +84,7 @@ export default function Table() {
       setCurrentCategory((prev) => categories.categories[0].name)
     }
   }, [order, id, isSuccess, message, categories.isSuccess])
-  console.log('MSG:', message)
+
   // set current category
   const changeCategory = (c) => {
     setCurrentCategory((prev) => c.name)
