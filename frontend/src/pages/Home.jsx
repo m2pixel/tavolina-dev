@@ -21,7 +21,6 @@ export default function Home() {
     } else {
       dispatch(getShift(user._id))
     }
-    // console.log('useEffect 1')
   }, [dispatch, navigate, shift.isSuccess])
 
   useEffect(() => {
@@ -39,7 +38,7 @@ export default function Home() {
   }
 
   const showTables = tables.map((table) => (
-    <Link key={table._id} to={`/${table._id}`}>
+    <Link key={table._id} to={`/table/${table._id}`}>
       <Table table={table} user={user} />
     </Link>
   ))

@@ -5,6 +5,8 @@ module.exports = {
       backgroundImage: {
         bgTableOn: "url('/public/bgTableOn.png')",
         bgTableOff: "url('/public/bgTableOff.png')",
+        headerLogo: "url('/public/logo.png')",
+        headerLogoSM: "url('/public/logosm.png')",
       },
       fontFamily: {
         'space-grotesk': ['Roboto', 'sans-serif'],

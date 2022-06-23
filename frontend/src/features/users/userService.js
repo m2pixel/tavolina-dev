@@ -63,12 +63,26 @@ const deleteUser = async (userId, token) => {
   return response.data
 }
 
+// user permission
+const userPermission = async (userId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.get(API_URL + 'hp/' + userId, config)
+
+  return response.data
+}
+
 const userService = {
   createUser,
   getUsers,
   getUser,
   deleteUser,
   updateUser,
+  userPermission,
 }
 
 export default userService

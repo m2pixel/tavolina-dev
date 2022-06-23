@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import Item from '../components/dashboard/Item'
+import uuid from 'react-uuid'
 import {
   getOrders,
   getRecords,
@@ -15,18 +16,8 @@ function Dashboard() {
   const dispatch = useDispatch()
   const { orders, records, message, isError, isSuccess, isLoading } =
     useSelector((state) => state.dashboard)
+  const { user } = useSelector((state) => state.auth)
 
-  const handleKeyPress = useCallback((event) => {
-    console.log(`key pressed: ${event.key}`)
-  }, [])
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress)
-    }
-  }, [handleKeyPress])
   useEffect(() => {
     dispatch(getOrders())
     dispatch(getRecords())
@@ -35,19 +26,78 @@ function Dashboard() {
       console.log(message)
     }
 
+    if (!user.permission) {
+      navigate('/error/401')
+    }
     return () => {
       dispatch(reset())
     }
-  }, [dispatch, isError, message])
+  }, [dispatch, isError, message, navigate])
 
-  const initialOrders = orders.map((order) => {
-    return order.map((o) => {
-      return <Item order={o} key={o._id} />
+  const convertDate = (date) => {
+    let convertDate = new Date(date)
+
+    return convertDate.toLocaleString('de-DE')
+  }
+
+  const initialOrders = orders?.map((order) => {
+    console.log(order)
+    return order?.map((o) => {
+      return (
+        <tr className="text-xs md:text-sm  bg-white border-b">
+          <th
+            scope="row"
+            className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+          >
+            {o.name}
+          </th>
+          <th
+            scope="row"
+            className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+          >
+            {convertDate(o.time)}
+          </th>
+          <th
+            scope="row"
+            className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+          >
+            {o.table}
+          </th>
+          <th
+            scope="row"
+            className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+          >
+            {o.price.toFixed(2)}&euro;
+          </th>
+        </tr>
+      )
     })
   })
 
-  const initialRecords = records.map((record) => {
-    return <Item key={record._id} record={record} />
+  console.log('initial: ', initialOrders)
+  const initialRecords = records?.map((record) => {
+    return (
+      <tr className="text-xs md:text-sm  bg-white border-b">
+        <th
+          scope="row"
+          className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+        >
+          {convertDate(record.createdAt)}
+        </th>
+        <th
+          scope="row"
+          className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+        >
+          {record.user}
+        </th>
+        <th
+          scope="row"
+          className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+        >
+          {record.total.toFixed(2)}&euro;
+        </th>
+      </tr>
+    )
   })
 
   return (
@@ -58,14 +108,14 @@ function Dashboard() {
         <div className="container md:mx-auto mb-5">
           <div className="flex flex-col md:flex-row lg:flex-wrap justify-center  mx-5 gap-5">
             <Card
-              key="abc"
-              title="5 porosite e fundit"
+              key={uuid()}
+              title="Porosite e fundit"
               list={initialOrders}
-              titleHead={['emri', 'çmimi']}
+              titleHead={['Produkti', 'Koha', 'tavolina', 'çmimi']}
             />
             <Card
-              key="efg"
-              title="8 ndrrimet e fundit"
+              key={uuid()}
+              title="Ndrrimet e fundit"
               list={initialRecords}
               titleHead={['Data', 'Kamarieri', 'totali']}
             />

@@ -46,8 +46,6 @@ export default function EditUser() {
     }
   }, [id, isSuccess, dispatch, isError])
 
-  console.log(category)
-
   const handleChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -72,6 +70,10 @@ export default function EditUser() {
       </option>
     )
   })
+
+  const goBack = () => {
+    navigate('/dashboard/products')
+  }
 
   return (
     <>
@@ -120,15 +122,12 @@ export default function EditUser() {
                     {showCategories}
                   </select>
                 </div>
-                <button
-                  className="w-80 bg-dark rounded font-bold text-sm hover:bg-opacity-80 uppercase text-white py-3"
-                  type="submit"
-                >
-                  Ruaj
-                </button>
-                <Link to="/dashboard/products">
-                  <Button title="Kthehu mbrapa" buttonStyle={6} />
-                </Link>
+                <Button title="Ruaj" buttonStyle={7} />
+                <Button
+                  title="Kthehu mbrapa"
+                  buttonStyle={6}
+                  action={() => goBack()}
+                />
               </div>
             </form>
           </section>

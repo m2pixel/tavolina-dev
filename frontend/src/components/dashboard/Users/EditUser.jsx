@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser, updateUser } from '../../../features/users/userSlice'
+import { getRoles } from '../../../features/role/roleSlice'
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Spinner from '../../Spinner'
@@ -20,11 +21,13 @@ export default function EditUser() {
   const { user, isSuccess, isError, message, isLoading } = useSelector(
     (state) => state.users
   )
+  const { roles } = useSelector((state) => state.roles)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(getUser(id))
+    dispatch(getRoles())
 
     if (isError) {
       console.log(message)
@@ -55,6 +58,10 @@ export default function EditUser() {
       message !== '' && toast.success(message)
       navigate('/dashboard/users')
     }
+  }
+
+  const goBack = () => {
+    navigate('/dashboard/users')
   }
 
   return (
@@ -105,8 +112,11 @@ export default function EditUser() {
                       className="w-full py-2 px-5 text-dark border border-dark rounded"
                     >
                       <option>Roli</option>
-                      <option value="user">Kamarier</option>
-                      <option value="admin">Menaxher</option>
+                      {roles?.map((role) => (
+                        <option key={role._id} value={role._id}>
+                          {role.role}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -151,9 +161,11 @@ export default function EditUser() {
                 </button>
               </div>
               <div className="pt-5">
-                <Link to="/dashboard/users">
-                  <Button title="Kthehu mbrapa" buttonStyle={6} />
-                </Link>
+                <Button
+                  title="Kthehu mbrapa"
+                  buttonStyle={6}
+                  action={() => goBack()}
+                />
               </div>
             </form>
           </section>

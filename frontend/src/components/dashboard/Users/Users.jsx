@@ -40,7 +40,6 @@ export default function Tables() {
     }
   }, [isError, message, dispatch])
 
-  console.log(message)
   const usersItems = users.map((user) => {
     return <UserItems key={user._id} user={user} deleteUserUI={deleteUserUI} />
   })

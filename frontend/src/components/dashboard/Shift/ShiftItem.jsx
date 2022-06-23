@@ -1,6 +1,3 @@
-import React, { useEffect } from 'react'
-import Spinner from '../../Spinner'
-
 export default function ShiftItem({ shift, user, close }) {
   const convertDate = (date) => {
     let convertDate = new Date(date)
@@ -14,7 +11,9 @@ export default function ShiftItem({ shift, user, close }) {
       <td className="px-6 py-4 text-sm text-dark ">
         {shift.closed ? 'Mbyllur' : 'Hapur'}
       </td>
-      <td className="px-6 py-4 text-sm text-dark ">{convertDate(shift.createdAt)}</td>
+      <td className="px-6 py-4 text-sm text-dark ">
+        {convertDate(shift.createdAt)}
+      </td>
       <td className="text-sm text-dark  font-light px-6 py-4">
         {!shift.closed ? (
           <button

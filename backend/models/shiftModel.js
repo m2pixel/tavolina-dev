@@ -8,12 +8,6 @@ const shiftSchema = mongoose.Schema(
       ref: 'User',
     },
 
-    orders: {
-      type: Array,
-      default: [],
-      ref: 'Order',
-    },
-
     closed: {
       type: Boolean,
       default: false,

@@ -1,19 +1,21 @@
 import React from 'react'
+import uuid from 'react-uuid'
+import Button from '../../Button'
 
-export default function ReportView({ report }) {
-  console.log(report.orders.map((r) => r.name))
-
+export default function ReportView({ report, toggle }) {
   const reportRender = report.orders.map((order) => {
     return (
-      <tr className="border-b">
+      <tr key={uuid()} className="border-b">
         <td className="px-6 py-1 text-sm text-dark ">{order.name}</td>
-        <td className="px-6 py-1 text-sm text-dark ">{order.qty}</td>
-        <td className="px-6 py-1 text-sm text-dark ">{order.price}&euro;</td>
+        <td className="px-6 py-1 text-sm text-dark ">1</td>
+        <td className="px-6 py-1 text-sm text-dark ">
+          {order.price.toFixed(2)}&euro;
+        </td>
       </tr>
     )
   })
   return (
-    <div className="container mx-auto md:w-1/3 flex flex-col">
+    <div className="container mx-auto md:w-2/4 flex flex-col">
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
           <div className="overflow-hidden">
@@ -46,9 +48,14 @@ export default function ReportView({ report }) {
               <p>
                 Kamarieri: <strong>{report.user}</strong>
               </p>
-              <p>
-                Total: <strong>{report.total}&euro;</strong>
+              <p className="pb-5">
+                Total: <strong>{report.total.toFixed(2)}&euro;</strong>
               </p>
+              <Button
+                title="Kthehu mbrapa"
+                buttonStyle={6}
+                action={() => toggle()}
+              />
             </div>
           </div>
         </div>

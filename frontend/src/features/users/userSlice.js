@@ -7,6 +7,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  permission: false,
   message: '',
 }
 
@@ -105,6 +106,24 @@ export const deleteUser = createAsyncThunk(
   }
 )
 
+// user permission
+export const userPermission = createAsyncThunk(
+  'users/role',
+  async (id, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token
+      return await userService.userPermission(id, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -188,6 +207,19 @@ export const userSlice = createSlice({
         })
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(userPermission.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(userPermission.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.permission = action.payload.permission
+      })
+      .addCase(userPermission.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

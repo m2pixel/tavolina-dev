@@ -84,12 +84,7 @@ function ProductForm({ reload, message }) {
               {showCategories}
             </select>
           </div>
-          <button
-            className="w-80 bg-dark rounded font-bold text-sm hover:opacity-80 text-white py-3"
-            type="submit"
-          >
-            Shto produktin
-          </button>
+          <Button title="Shto produkt" buttonStyle={7} />
           <Button
             title="Kthehu mbrapa"
             buttonStyle={6}

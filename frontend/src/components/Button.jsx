@@ -12,7 +12,7 @@ export default function Button(props) {
       break
     case 2:
       btn =
-        'bg-secondary text-white cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 text-xl rounded shadow-xl'
+        'bg-secondary text-white text-center cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 text-xl rounded shadow-xl'
       break
     case 3:
       btn =
@@ -32,6 +32,10 @@ export default function Button(props) {
       btn =
         'w-80 bg-tableOff text-center cursor-pointer rounded font-bold text-sm hover:opacity-80 uppercase text-white py-3 px-2 text-center'
       break
+    case 7:
+      btn =
+        'w-80 bg-dark rounded font-bold text-sm hover:bg-opacity-80 uppercase text-center text-white py-3'
+      break
     default:
       btn =
         'bg-dark w-full text-white cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 text-xl rounded shadow-xl'
@@ -41,16 +45,27 @@ export default function Button(props) {
   //   : `py-5 px-5 text-xl rounded shadow-xl ${props.buttonStyle}`
 
   return (
-    <div
-      className={btn}
-      onClick={() => {
-        return props.obj ? props.action(props.obj) : props.action()
-      }}
-    >
-      {props.title}{' '}
-      {props.icon != null && (
-        <FontAwesomeIcon className="text-white pl-3" icon={props.icon} />
+    <>
+      {props.action ? (
+        <div
+        className={btn}
+          onClick={() => {
+            return props.obj ? props.action(props.obj) : props.action()
+          }}
+        >
+          {props.title}{' '}
+          {props.icon != null && (
+            <FontAwesomeIcon className="text-white pl-3" icon={props.icon} />
+          )}
+        </div>
+      ) : (
+        <button className={btn}>
+          {props.title}{' '}
+          {props.icon != null && (
+            <FontAwesomeIcon className="text-white pl-3" icon={props.icon} />
+          )}
+        </button>
       )}
-    </div>
+    </>
   )
 }

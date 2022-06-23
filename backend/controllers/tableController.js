@@ -102,7 +102,7 @@ const deleteTable = asyncHandler(async (req, res) => {
   const table = await Table.findByIdAndDelete(req.params.id)
 
   if (!table) {
-    req.stasus(400)
+    req.status(400)
     throw new Error('Table didnt deleted')
   }
   res.status(200).json({ msg: 'Table removed' })

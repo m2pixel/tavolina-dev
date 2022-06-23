@@ -55,9 +55,9 @@ export default function EditCategory() {
     }
   }
 
-  console.log('message: ', message, 'Success: ', isSuccess)
-  console.log('name: ', name)
-
+  const goBack = () => {
+    navigate('/dashboard/categories')
+  }
   return (
     <>
       {isLoading ? (
@@ -83,15 +83,12 @@ export default function EditCategory() {
                     onChange={onChange}
                   />
                 </div>
-                <button
-                  className="w-80 bg-dark rounded font-bold text-sm hover:bg-opacity-80 uppercase text-white py-3"
-                  type="submit"
-                >
-                  Ruaj
-                </button>
-                <Link to="/dashboard/categories">
-                  <Button title="Kthehu mbrapa" buttonStyle={6} />
-                </Link>
+                <Button title="Ruaj" buttonStyle={7} />
+                <Button
+                  title="Kthehu mbrapa"
+                  buttonStyle={6}
+                  action={() => goBack()}
+                />
               </div>
             </form>
           </section>

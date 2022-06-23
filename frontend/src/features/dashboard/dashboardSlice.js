@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import dashboardService from './dashboardService'
 
 const initialState = {
+  count: 0,
   orders: [],
   records: [],
   isError: false,
@@ -63,7 +64,11 @@ export const dashboardSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.orders = action.payload.map((order) => {
-          return order.orders.map((ord) => ord)
+          return order.orders.map((ord) => ({
+            ...ord,
+            time: order.createdAt,
+            table: order.table.name,
+          }))
         })
       })
       .addCase(getOrders.rejected, (state, action) => {

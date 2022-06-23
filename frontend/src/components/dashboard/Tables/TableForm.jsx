@@ -32,12 +32,7 @@ function TableForm({ reload }) {
             onChange={(e) => setName(e.target.value)}
             placeholder="Sheno emrin"
           />
-          <button
-            className="w-80 bg-dark rounded font-bold text-sm hover:opacity-80 uppercase text-white py-3"
-            type="submit"
-          >
-            Shto tavoline
-          </button>
+          <Button title="Shto tavoline" buttonStyle={7} />
           <Button
             title="Kthehu mbrapa"
             action={() => reload()}

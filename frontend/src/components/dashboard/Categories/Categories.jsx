@@ -28,7 +28,7 @@ export default function Tables() {
   const reloadAfterAddTable = () => {
     setShowForm((prev) => false)
   }
-  console.log('msg: ', message)
+
   useEffect(() => {
     if (isError) {
       toast.error(message)

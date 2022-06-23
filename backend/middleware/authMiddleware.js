@@ -17,7 +17,9 @@ const protect = asyncHandler(async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
       // Get user from the token
-      req.user = await User.findById(decoded.id).select('-password')
+      req.user = await User.findOne({ _id: decoded.id })
+        .select('-password')
+        .populate('role', 'permission')
 
       next()
     } catch (error) {
@@ -34,15 +36,12 @@ const protect = asyncHandler(async (req, res, next) => {
 })
 
 const hasPermission = asyncHandler(async (req, res, next) => {
-  // console.log(req.body)
-  try {
-    console.log(`hasPermission: ${req.params}`)
-
-    next()
-  } catch (error) {
+  if (!req.user.role.permission) {
     res.status(401)
-    throw new Error('no params')
+    throw new Error('You have no permission')
   }
+
+  next()
 })
 
 // const role = asyncHandler(async (req, res) => {

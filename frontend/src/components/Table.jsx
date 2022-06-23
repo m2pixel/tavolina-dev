@@ -13,7 +13,7 @@ export default function Table({ table, user }) {
   const { name, total } = lastOrder
 
   const style = table.opened
-    ? 'w-40 h-48 bg-tableOff text-stone-200 rounded font-space-grotesk py-2 text-center shadow-xl'
+    ? 'w-40 h-48 bg-tableOff text-white rounded font-space-grotesk py-2 text-center shadow-xl'
     : 'w-40 h-48 bg-bgTableOn text-white rounded font-space-grotesk py-2 text-center'
 
   return (

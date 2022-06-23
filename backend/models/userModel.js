@@ -16,8 +16,9 @@ const userSchema = mongoose.Schema(
       required: [true, 'Please add a password'],
     },
     role: {
-      type: String,
-      required: [false, 'Please set user role'],
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Role',
     },
   },
   {

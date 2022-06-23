@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
   getTable,
+  getTables,
   openTable,
   closeTable,
   resetTable,
@@ -29,14 +30,12 @@ import Button from '../components/Button'
 import uuid from 'react-uuid'
 
 export default function Table() {
+  let price = 0
   // current category
   const [currentCategory, setCurrentCategory] = useState('')
-  const { table } = useSelector((state) => state.tables)
+  const { table, tables } = useSelector((state) => state.tables)
   const categories = useSelector((state) => state.categories)
   const { shift, isError } = useSelector((state) => state.shifts)
-  const [total, setTotal] = useState(0)
-  let price = 0
-
   const { order, isSuccess, isLoading, message } = useSelector(
     (state) => state.orders
   )
@@ -51,10 +50,17 @@ export default function Table() {
   useEffect(() => {
     dispatch(getCategories())
     dispatch(getTable(id))
+    dispatch(getTables())
     dispatch(getShift(user._id))
 
+    if (tables.length > 0) {
+      const filterTables = tables?.filter((table) => table._id === id)
+
+      return filterTables.length === 0 ? navigate('/error/404') : 1
+    }
+
     price = 0
-  }, [dispatch, name])
+  }, [dispatch, name, isError])
 
   useEffect(() => {
     if (id !== undefined) {
@@ -64,7 +70,7 @@ export default function Table() {
 
   useEffect(() => {
     if (isSuccess) {
-      if (order.table === id) setOrdersUI(order.orders)
+      if (order.table === id && !order.paid) setOrdersUI(order.orders)
       else setOrdersUI([])
     }
 
@@ -77,8 +83,8 @@ export default function Table() {
     if (categories.categories.length > 0 && currentCategory === '') {
       setCurrentCategory((prev) => categories.categories[0].name)
     }
-  }, [order, id, isSuccess, categories.isSuccess])
-
+  }, [order, id, isSuccess, message, categories.isSuccess])
+  console.log('MSG:', message)
   // set current category
   const changeCategory = (c) => {
     setCurrentCategory((prev) => c.name)
@@ -110,11 +116,28 @@ export default function Table() {
     ])
   }
 
+  const orderAndPaid = (orders) => {
+    if (orders.length > 0) {
+      dispatch(
+        createOrder({
+          table: table._id,
+          user: user._id,
+          shift: shift._id,
+          orders: currentOrder,
+          paid: true,
+        })
+      )
+      dispatch(resetOrder())
+      navigate('/')
+    }
+  }
   const createOrderUI = (orders) => {
     if (orders.length > 0) {
       if (ordersUI.length > 0) {
         const concatedOrders = ordersUI.concat(orders)
-        dispatch(updateOrder({ id: order._id, orders: concatedOrders }))
+        dispatch(
+          updateOrder({ id: order._id, orders: concatedOrders, paid: false })
+        )
         localStorage.setItem(
           table._id,
           JSON.stringify({
@@ -128,7 +151,9 @@ export default function Table() {
           createOrder({
             table: table._id,
             user: user._id,
+            shift: shift._id,
             orders: currentOrder,
+            paid: false,
           })
         )
         localStorage.setItem(
@@ -148,11 +173,21 @@ export default function Table() {
 
   const closeOrderUI = (id) => {
     if (ordersUI.length > 0) {
-      dispatch(closeTable(id))
-      dispatch(pushOrder({ id: shift._id, order: order._id }))
-      dispatch(resetOrder())
-      localStorage.removeItem(table._id)
-      navigate('/')
+      if (currentOrder.length > 0) {
+        const concatedOrders = ordersUI.concat(currentOrder)
+        dispatch(
+          updateOrder({ id: order._id, orders: concatedOrders, paid: true })
+        )
+        dispatch(closeTable(id))
+        dispatch(resetOrder())
+        localStorage.removeItem(table._id)
+        navigate('/')
+      } else {
+        dispatch(closeTable(id))
+        dispatch(resetOrder())
+        localStorage.removeItem(table._id)
+        navigate('/')
+      }
     } else {
       toast.error('Nuk ka asnje porosi per te paguar.')
     }
@@ -210,17 +245,32 @@ export default function Table() {
               icon={faCheckDouble}
             />
             <span className="my-2 mx-5 border border-primary"></span>
-            <Button
-              title="Paguaj"
-              buttonStyle={3}
-              obj={table._id}
-              action={closeOrderUI}
-              icon={faDollarSign}
-            />
+            {ordersUI.length > 0 ? (
+              <Button
+                title="Paguaj"
+                buttonStyle={ordersUI.length > 0 ? 2 : 3}
+                obj={table._id}
+                action={closeOrderUI}
+                icon={faDollarSign}
+              />
+            ) : (
+              <Button
+                title="Paguaj"
+                buttonStyle={currentOrder.length > 0 ? 2 : 3}
+                obj={currentOrder}
+                action={orderAndPaid}
+                icon={faDollarSign}
+              />
+            )}
             <span className="my-2 mx-5 border border-primary"></span>
             <div className="">
               <Link to="/">
-                <Button title="Kthehu" buttonStyle={4} icon={faAnglesLeft} />
+                <Button
+                  title="Kthehu"
+                  buttonStyle={4}
+                  icon={faAnglesLeft}
+                  // action={() => 'd'}
+                />
               </Link>
             </div>
           </div>

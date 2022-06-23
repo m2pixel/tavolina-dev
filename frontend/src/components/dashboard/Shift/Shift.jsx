@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   getShifts,
   closeShift,
@@ -16,25 +16,25 @@ export default function Shift() {
   const { shifts, isLoading, message, isError, isSuccess } = useSelector(
     (state) => state.shifts
   )
-  // const [user, setUser] = useState({ name: '' })
   const { users } = useSelector((state) => state.users)
 
   useEffect(() => {
     dispatch(getShifts())
     dispatch(getUsers())
+
+    if (isError) {
+      message !== '' && toast.error(message)
+    } else if (isSuccess) {
+      message !== '' && toast.info(message)
+    }
+
     return () => {
       dispatch(reset())
     }
-  }, [dispatch])
-  // console.log(users)
+  }, [dispatch, message, isError])
+
   const close = (id) => {
     dispatch(closeShift(id))
-
-    if (isError) {
-      toast.error(message)
-    } else if (isSuccess) {
-      toast.success('Ndrrimi u mbyll')
-    }
   }
 
   const shiftList = shifts?.map((shift) => {
@@ -53,7 +53,7 @@ export default function Shift() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="">
+        <div className="container mx-auto">
           <h2 className="flex justify-center font-semibold">
             Menaxhimi i ndrrimeve
           </h2>

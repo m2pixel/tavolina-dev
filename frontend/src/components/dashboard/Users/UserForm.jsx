@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createUser } from '../../../features/users/userSlice'
+import { getRoles } from '../../../features/role/roleSlice'
 import { toast } from 'react-toastify'
 import Button from '../../Button'
+import { useEffect } from 'react'
 
 function CategoryForm({ reload }) {
   const [formData, setFormData] = useState({
@@ -14,9 +16,14 @@ function CategoryForm({ reload }) {
   })
 
   const { name, email, password, password2, role } = formData
-
+  const { roles, message } = useSelector((state) => state.roles)
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    dispatch(getRoles())
+  }, [dispatch])
+
+  console.log('roles', roles, 'message', message)
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -106,23 +113,19 @@ function CategoryForm({ reload }) {
               className="w-full py-2 px-5 text-dark border border-dark rounded"
             >
               <option>Roli</option>
-              <option value="user">Kamarier</option>
-              <option value="admin">Menaxher</option>
+              {roles?.map((role) => (
+                <option key={role._id} value={role._id}>
+                  {role.role}
+                </option>
+              ))}
             </select>
           </div>
-          <button
-            className="w-80 bg-dark rounded font-bold text-sm hover:bg-opacity-80 uppercase text-white py-3"
-            type="submit"
-          >
-            Shto perdorues
-          </button>
-          `
+          <Button title="Shto perdorues" buttonStyle={7} />
           <Button
             title="Kthehu mbrapa"
             action={() => reload()}
             buttonStyle={6}
           />
-          `
         </form>
       </section>
     </div>

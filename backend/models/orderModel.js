@@ -12,6 +12,11 @@ const orderSchema = mongoose.Schema(
       required: true,
       ref: 'Table',
     },
+    shift: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Shift',
+    },
     orders: {
       type: Array,
       required: false,

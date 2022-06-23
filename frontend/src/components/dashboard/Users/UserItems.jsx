@@ -9,12 +9,12 @@ export default function UserItems({ user, deleteUserUI }) {
       <td className="px-6 py-4 text-sm text-dark ">
         <span
           className={
-            user.role === 'admin'
+            user.role.permission
               ? 'bg-tableOff rounded-3xl font-semibold text-white py-1 px-4'
               : 'font-semibold text-dark py-1 px-4'
           }
         >
-          {user.role}
+          {user.role.role}
         </span>
       </td>
       <td className="text-sm font-light px-6 py-4 whitespace-nowrap">

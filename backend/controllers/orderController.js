@@ -14,10 +14,11 @@ const createOrder = asyncHandler(async (req, res) => {
   const order = await Order.create({
     table: req.body.table,
     user: req.user.id,
+    shift: req.body.shift,
     orders: req.body.orders,
-    paid: req.body.paid ? true : false,
+    paid: req.body.paid,
   })
-
+  console.log(order)
   res.status(200).json(order)
 })
 
@@ -41,7 +42,7 @@ const getOrders = asyncHandler(async (req, res) => {
 const updateOrder = asyncHandler(async (req, res) => {
   const order = await Order.findOneAndUpdate(
     { _id: req.params.id },
-    { $set: { orders: req.body.orders } },
+    { $set: { orders: req.body.orders, paid: req.body.paid } },
     { new: true }
   )
 

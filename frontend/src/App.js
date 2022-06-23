@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { getUser } from './features/users/userSlice'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Header from './components/Header'
@@ -17,7 +19,8 @@ import EditCategory from './components/dashboard/Categories/EditCategory'
 import Products from './components/dashboard/Products/Products'
 import EditProduct from './components/dashboard/Products/EditProduct'
 import Shift from './components/dashboard/Shift/Shift'
-
+import NotFound from './pages/NotFound'
+import Access from './pages/Access'
 function App() {
   return (
     <>
@@ -25,7 +28,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/:id" element={<Table />} />
+          <Route path="/table/:id" element={<Table />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -39,6 +42,8 @@ function App() {
           <Route path="dashboard/products" element={<Products />} />
           <Route path="dashboard/product/:id" element={<EditProduct />} />
           <Route path="dashboard/shift" element={<Shift />} />
+          <Route path="/error/404" element={<NotFound />} />
+          <Route path="/error/401" element={<Access />} />
         </Routes>
       </Router>
       <ToastContainer />

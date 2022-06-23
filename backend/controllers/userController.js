@@ -61,7 +61,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users
 // @access  private
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find()
+  const users = await User.find().populate('role')
 
   if (!users) {
     res.status(400)
@@ -78,19 +78,19 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body
 
   // Check for user email
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email }).populate('role', 'permission')
 
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       _id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
       token: generateToken(user._id),
+      permission: user.role.permission,
     })
   } else {
     res.status(400)
-    throw new Error('Invalid credentials')
+    throw new Error('Te dhenat jane gabim.')
   }
 })
 
@@ -119,7 +119,7 @@ const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findByIdAndDelete(req.params.id)
 
   if (!user) {
-    res.stasus(400)
+    res.status(400)
     throw new Error('user didnt deleted')
   }
   res.status(200).json({ msg: 'Perdoruesi u fshi me sukses' })
@@ -177,6 +177,23 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc    get user role
+// @route   DELETE /api/users/:id
+// @access  Private
+const userPermission = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ _id: req.params.id }).populate(
+    'role',
+    'permission'
+  )
+
+  if (!user) {
+    res.status(400)
+    throw new Error('User not found')
+  }
+
+  res.status(200).json({ permission: user.role.permission })
+})
+
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -192,4 +209,5 @@ module.exports = {
   getMe,
   deleteUser,
   updateUser,
+  userPermission,
 }

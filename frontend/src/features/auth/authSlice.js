@@ -9,6 +9,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  hasPermission: false,
   message: '',
 }
 
@@ -80,6 +81,7 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.hasPermission = action.payload.permission
         state.user = action.payload
       })
       .addCase(login.rejected, (state, action) => {

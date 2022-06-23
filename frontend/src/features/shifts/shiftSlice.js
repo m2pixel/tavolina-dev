@@ -166,8 +166,11 @@ export const shiftSlice = createSlice({
       .addCase(closeShift.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.message = action.payload.msg
         state.shifts = state.shifts.map((shift) => {
-          return shift._id === action.payload._id ? action.payload : shift
+          return shift._id === action.payload.shift._id
+            ? action.payload.shift
+            : shift
         })
       })
       .addCase(closeShift.rejected, (state, action) => {

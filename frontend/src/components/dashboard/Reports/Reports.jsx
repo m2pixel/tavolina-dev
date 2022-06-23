@@ -7,7 +7,7 @@ import Spinner from '../../Spinner'
 
 export default function Calendar() {
   const dispatch = useDispatch()
-  const [showReport, setShowReport] = useState(false)
+  const [showTable, setShowTable] = useState(false)
 
   const { reports, report, isLoading, isError, isSucces, message } =
     useSelector((state) => state.reports)
@@ -24,17 +24,22 @@ export default function Calendar() {
   }
 
   const deleteReport = (id) => {}
-  const toggleReport = (id) => {
+
+  const showReport = (id) => {
     dispatch(getReport(id))
-    setShowReport((prev) => true)
+    setShowTable((prev) => !prev)
   }
-  console.log(report)
+
+  const toggle = () => {
+    setShowTable((prev) => false)
+  }
+
   const reportsRender = reports?.map((report) => {
     return (
       <ReportItem
         key={report._id}
         report={report}
-        toggleReport={toggleReport}
+        showReport={showReport}
         deleteReport={deleteReport}
       />
     )
@@ -45,12 +50,12 @@ export default function Calendar() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <div>
+        <div className="container mx-auto">
           <h2 className="flex justify-center font-semibold">
             Menaxhimi i raportit
           </h2>
           <div>
-            {!showReport ? (
+            {!showTable ? (
               <div className="flex flex-col">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
@@ -97,7 +102,7 @@ export default function Calendar() {
                 </div>
               </div>
             ) : (
-              <ReportView report={report} />
+              <ReportView report={report} toggle={toggle} />
             )}
           </div>
         </div>

@@ -1,4 +1,4 @@
-function ReportItem({ report, toggleReport, deleteReport }) {
+function ReportItem({ report, showReport, deleteReport }) {
   const convertDate = (date) => {
     let convertDate = new Date(date)
 
@@ -16,7 +16,7 @@ function ReportItem({ report, toggleReport, deleteReport }) {
       <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
         <button
           className="bg-secondary text-white px-2 py-1 rounded"
-          onClick={() => toggleReport(report._id)}
+          onClick={() => showReport(report._id)}
         >
           Shfaq
         </button>

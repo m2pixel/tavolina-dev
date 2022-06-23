@@ -1,13 +1,38 @@
 import React from 'react'
 
-export default function Item({ order, record }) {
+export default function Item(props) {
   const convertDate = (date) => {
     let convertDate = new Date(date)
 
     return convertDate.toLocaleString('de-DE')
   }
+
   return (
     <tr className="text-xs md:text-sm  bg-white border-b">
+      <th
+        scope="row"
+        className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+      >
+        {props.name}
+      </th>
+      <th
+        scope="row"
+        className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+      >
+        {props.table}
+      </th>
+      <th
+        scope="row"
+        className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
+      >
+        {props.price}
+      </th>
+    </tr>
+  )
+}
+
+{
+  /* <tr className="text-xs md:text-sm  bg-white border-b">
       <th
         scope="row"
         className="md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap"
@@ -18,6 +43,5 @@ export default function Item({ order, record }) {
       <td className="px-2 py-2">
         {order ? order.price.toFixed(2) : record.total.toFixed(2)}&euro;
       </td>
-    </tr>
-  )
+    </tr> */
 }

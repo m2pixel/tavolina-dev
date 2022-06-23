@@ -33,7 +33,7 @@ const getShift = asyncHandler(async (req, res) => {
 
   if (!shift) {
     res.status(400)
-    throw new Error('You have no shift')
+    throw new Error('You have no shift 1')
   }
 
   res.status(200).json(shift)
@@ -48,7 +48,7 @@ const pushOrder = asyncHandler(async (req, res) => {
 
   if (!shift) {
     res.status(400)
-    throw new Error('You have no shift')
+    throw new Error('You have no shift 2')
   } else if (!req.body.order) {
     res.status(400)
     throw new Error('Order missed')
@@ -61,38 +61,16 @@ const closeShift = asyncHandler(async (req, res) => {
   let shiftOrders = []
   const countOrders = await Order.find({ paid: false }).count()
 
+  // close all tables before closing shift
   if (countOrders > 0) {
     res.status(400)
-    throw new Error('Close all tables')
+    throw new Error('Mbyll te gjitha tavolinat')
   }
 
   // addOrders method pushes orders to shiftOrders
   const addOrders = (orders) => {
-    orders.map((o) => {
-      shiftOrders.push({ name: o.name, price: o.price })
-    })
-    // console.log('orders: ', orders)
-  }
-
-  const shift = await Shift.findOneAndUpdate(
-    { _id: req.params.id },
-    { $set: { closed: true } },
-    { new: true }
-  )
-
-  const user = await User.findOne({ _id: shift.user })
-  const orders = await Order.find({ paid: true, user: user._id })
-
-  if (!shift) {
-    res.status(400)
-    throw new Error('Shift not found')
-  } else {
-    shift.orders.map((id) => {
-      orders.map((order) => {
-        if (order._id == id) {
-          addOrders(order.orders)
-        }
-      })
+    return orders.orders.map((order) => {
+      return shiftOrders.push({ name: order.name, price: order.price })
     })
   }
 
@@ -102,7 +80,29 @@ const closeShift = asyncHandler(async (req, res) => {
 
     orders.map((order) => (price += order.price))
 
-    return price
+    return price.toFixed(2)
+  }
+
+  // console.log('orders: ', orders)
+
+  const shift = await Shift.findOneAndUpdate(
+    { _id: req.params.id },
+    { $set: { closed: true } },
+    { new: true }
+  )
+
+  const user = await User.findOne({ _id: shift.user })
+
+  const orders = await Order.find(
+    { shift: shift._id, paid: true },
+    { orders: 1 }
+  )
+
+  if (!shift) {
+    res.status(400)
+    throw new Error('Shift not found')
+  } else {
+    orders.map((order) => addOrders(order))
   }
 
   const record = await Record.create({
@@ -112,7 +112,7 @@ const closeShift = asyncHandler(async (req, res) => {
     total: getPrice(shiftOrders),
   })
 
-  res.status(200).json(shift)
+  res.status(200).json({ msg: 'Ndrrimi u mbyll', shift })
 })
 
 module.exports = {

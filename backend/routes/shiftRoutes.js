@@ -8,7 +8,9 @@ const {
   pushOrder,
 } = require('../controllers/shiftController')
 
-router.route('/').get(getShifts).post(createShift)
+const { protect, hasPermission } = require('../middleware/authMiddleware')
+
+router.route('/').get(protect, hasPermission, getShifts).post(createShift)
 router.route('/:id').get(getShift).put(closeShift)
 router.route('/add/:id').put(pushOrder)
 
