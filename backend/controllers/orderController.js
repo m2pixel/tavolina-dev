@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const Order = require('../models/orderModel')
-// const Table = require('../models/tableModel')
+const Table = require('../models/tableModel')
 
 // @desc    create order
 // @route   POST /api/orders
@@ -16,9 +16,21 @@ const createOrder = asyncHandler(async (req, res) => {
     user: req.user.id,
     shift: req.body.shift,
     orders: req.body.orders,
+    total: req.body.total.toFixed(2),
     paid: req.body.paid,
   })
-  console.log(order)
+
+  if (order) {
+    await Table.updateOne(
+      { _id: order.table },
+      {
+        $set: {
+          order: [order.total, order.orders[order.orders.length - 1].name],
+        },
+      }
+    )
+  }
+
   res.status(200).json(order)
 })
 
@@ -42,7 +54,13 @@ const getOrders = asyncHandler(async (req, res) => {
 const updateOrder = asyncHandler(async (req, res) => {
   const order = await Order.findOneAndUpdate(
     { _id: req.params.id },
-    { $set: { orders: req.body.orders, paid: req.body.paid } },
+    {
+      $set: {
+        orders: req.body.orders,
+        total: req.body.total.toFixed(2),
+        paid: req.body.paid,
+      },
+    },
     { new: true }
   )
 
@@ -54,6 +72,15 @@ const updateOrder = asyncHandler(async (req, res) => {
   if (!order) {
     res.status(400)
     throw new Error('order not found')
+  } else {
+    await Table.updateOne(
+      { _id: order.table },
+      {
+        $set: {
+          order: [order.total, order.orders[order.orders.length - 1].name],
+        },
+      }
+    )
   }
 
   res.status(200).json(order)

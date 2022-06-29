@@ -21,6 +21,10 @@ const orderSchema = mongoose.Schema(
       type: Array,
       required: false,
     },
+    total: {
+      type: Number,
+      required: false,
+    },
     paid: {
       type: Boolean,
       default: false,

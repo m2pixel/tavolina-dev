@@ -8,7 +8,7 @@ export default function Button(props) {
   switch (btnStyle) {
     case 1:
       btn =
-        'bg-dark text-white cursor-pointer underline underline-offset-8 decoration-primary w-fit text-white hover:text-primary py-5 px-5 text-xl rounded shadow-xl'
+        'bg-dark text-white cursor-pointer underline underline-offset-8 decoration-primary w-fit text-white hover:text-primary text-sm py-2 px-2 md:py-5 md:px-5 md:text-xl rounded shadow-xl'
       break
     case 2:
       btn =
@@ -36,6 +36,10 @@ export default function Button(props) {
       btn =
         'w-80 bg-dark rounded font-bold text-sm hover:bg-opacity-80 uppercase text-center text-white py-3'
       break
+    case 8:
+      btn =
+        'w-40 md:w-fit bg-dark text-center text-white cursor-pointer underline underline-offset-8 decoration-secondary text-white hover:text-secondary text-lg py-2 px-2 md:py-5 md:px-5 md:text-xl rounded shadow-xl'
+      break
     default:
       btn =
         'bg-dark w-full text-white cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 text-xl rounded shadow-xl'
@@ -48,7 +52,7 @@ export default function Button(props) {
     <>
       {props.action ? (
         <div
-        className={btn}
+          className={btn}
           onClick={() => {
             return props.obj ? props.action(props.obj) : props.action()
           }}

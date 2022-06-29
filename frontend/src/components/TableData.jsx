@@ -12,12 +12,14 @@ export default function TableData({ currentOrder, ordersUI, deleteItem }) {
       />
     )
   })
+  console.log(ordersUI)
 
   const showCurrentOrders = currentOrder?.map((order) => {
     return (
       <TableItem
         key={uuid()}
         order={order}
+        // createdAt={}
         deleteItem={deleteItem}
         status="currentOrder"
       />
@@ -25,21 +27,19 @@ export default function TableData({ currentOrder, ordersUI, deleteItem }) {
   })
 
   return (
-    <div className="overflow-x-auto">
-      <div className="mx-5">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>Emri</th>
-              <th>Sasia</th>
-              <th>Cmimi</th>
-              <th>Largo</th>
-            </tr>
-          </thead>
-          <tbody className="border-b borde-primary my-5">{showOrders}</tbody>
-          <tbody>{showCurrentOrders}</tbody>
-        </table>
-      </div>
+    <div className="mx-2 my-5">
+      <table className="table-auto w-full border-collapse border border-dark rounded">
+        <thead className="bg-gray-300 bg-opacity-40">
+          <tr>
+            <th>Emri</th>
+            <th>Sasia</th>
+            <th>Cmimi</th>
+            <th>Fshije</th>
+          </tr>
+        </thead>
+        <tbody className="">{showOrders}</tbody>
+        <tbody>{showCurrentOrders}</tbody>
+      </table>
     </div>
   )
 }

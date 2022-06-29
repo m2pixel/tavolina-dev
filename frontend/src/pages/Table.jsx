@@ -94,6 +94,7 @@ export default function Table() {
   const showCategories = categories.categories.map((category) => {
     return (
       <Button
+        buttonStyle={1}
         key={category._id}
         title={category.name}
         obj={category}
@@ -101,6 +102,14 @@ export default function Table() {
       />
     )
   })
+
+  // return current hour and minutes
+  const getDate = () => {
+    const now = new Date()
+    const current = now.getHours() + ':' + now.getMinutes()
+
+    return current
+  }
 
   // add product to order
   const addItem = (product) => {
@@ -112,6 +121,7 @@ export default function Table() {
         name: product.name,
         qty: 1,
         price: product.price,
+        time: getDate(),
       },
     ])
   }
@@ -124,6 +134,7 @@ export default function Table() {
           user: user._id,
           shift: shift._id,
           orders: currentOrder,
+          total: price,
           paid: true,
         })
       )
@@ -136,7 +147,12 @@ export default function Table() {
       if (ordersUI.length > 0) {
         const concatedOrders = ordersUI.concat(orders)
         dispatch(
-          updateOrder({ id: order._id, orders: concatedOrders, paid: false })
+          updateOrder({
+            id: order._id,
+            orders: concatedOrders,
+            total: price,
+            paid: false,
+          })
         )
         localStorage.setItem(
           table._id,
@@ -153,6 +169,7 @@ export default function Table() {
             user: user._id,
             shift: shift._id,
             orders: currentOrder,
+            total: price,
             paid: false,
           })
         )
@@ -204,22 +221,22 @@ export default function Table() {
   )
 
   return (
-    <div className="md:mx-10 md:my-10 font-space-grotesk">
-      <div className="flex flex-col space-x-2 md:flex-row">
+    <div className="md:mx-10 md:my-10 font-space-grotesk text-dark">
+      <div className="flex flex-col md:flex-row md:space-x-5">
         <div className="w-full h-fit md:w-2/3">
-          <div className="flex flex-col space-y-6">
-            <div className="flex flex-row justify-between bg-primary bg-opacity-20 p-2 rounded">
+          <div className="flex flex-col md:space-y-6">
+            <div className="flex flex-row justify-between bg-primary bg-opacity-20 py-2 px-1 md:p-2 md:rounded">
               {showCategories}
             </div>
-            <div className="bg-secondary bg-opacity-20 rounded">
+            <div className="bg-secondary bg-opacity-20 md:rounded">
               <ProductList add={addItem} category={currentCategory} />
             </div>
           </div>
         </div>
-        <div className="w-full md:w-1/3 md:h-fit bg-layerBg">
-          <p className="py-2 font-bold text-xl text-center">
-            Tavolina: {table.name}
-          </p>
+        <div className="w-full md:w-1/3 pb-5 rounded bg-layerBg">
+          <div className="bg-dark text-white py-2 uppercase text-center font-semibold rounded-t border-b-2 border-primary">
+            <span>Tavolina: {table.name}</span>
+          </div>
 
           {isLoading ? (
             <Spinner />
@@ -231,8 +248,15 @@ export default function Table() {
               ordersUI={ordersUI}
             />
           )}
-          <div className="flex justify-end py-2 mx-2">
-            <span className="w-40 text-center bg-tableOn font-bold text-xl py-2">
+          <div className="flex justify-end py-2 mx-2 space-x-3">
+            <input
+              type="text"
+              name="order_msg"
+              id="order_msg"
+              placeholder="Defino porosine"
+              className="w-3/5 border border-secondary bg-secondary bg-opacity-20  text-dark placeholder-dark px-2"
+            />
+            <span className="w-2/5 text-center bg-tableOn font-bold text-xl py-2">
               {price.toFixed(2)} &euro;
             </span>
           </div>

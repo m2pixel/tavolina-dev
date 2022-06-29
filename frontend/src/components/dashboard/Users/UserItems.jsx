@@ -5,7 +5,6 @@ export default function UserItems({ user, deleteUserUI }) {
   return (
     <tr className="border-b">
       <td className="px-6 py-4 text-sm text-dark ">{user.name}</td>
-      <td className="px-6 py-4 text-sm text-dark ">{user.email}</td>
       <td className="px-6 py-4 text-sm text-dark ">
         <span
           className={
@@ -18,19 +17,19 @@ export default function UserItems({ user, deleteUserUI }) {
         </span>
       </td>
       <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
-        <Link to={`/dashboard/users/${user._id}`}>
-          <button className="bg-secondary text-white px-2 py-1 rounded font-semibold">
-            Edit
+        <div className="flex flex-col md:flex-row items-center gap-2 ">
+          <Link to={`/dashboard/users/${user._id}`}>
+            <button className="w-16 bg-secondary text-white xs:text-xs px-2 py-1 rounded font-semibold">
+              Edit
+            </button>
+          </Link>
+          <button
+            className="w-16 bg-primary text-white xs:text-xs px-2 py-1 rounded font-semibold"
+            onClick={() => deleteUserUI(user._id)}
+          >
+            Delete
           </button>
-        </Link>
-      </td>
-      <td className="text-sm text-dark  font-light px-6 py-4">
-        <button
-          className="bg-primary text-white px-2 py-1 rounded font-semibold"
-          onClick={() => deleteUserUI(user._id)}
-        >
-          Delete
-        </button>
+        </div>
       </td>
     </tr>
   )

@@ -51,15 +51,15 @@ export default function Tables() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="container mx-auto">
-          <h2 className="flex justify-center font-semibold">
+        <div className="container mx-auto mt-5">
+          <h2 className="flex justify-center text-xl md:text-2xl font-semibold">
             Menaxhimi i perdoruesve
           </h2>
           {showForm ? (
             <UserForm reload={reloadAfterAddTable} />
           ) : (
             <div>
-              <div className="flex justify-end mx-5 my-5">
+              <div className="flex justify-center md:justify-end mx-5 my-5">
                 <Button
                   title="Shto perdorues"
                   icon={faPlus}
@@ -71,7 +71,7 @@ export default function Tables() {
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                     <div className="overflow-hidden">
-                      <table className="min-w-full">
+                      <table className="w-full table-action">
                         <thead className="border-b">
                           <tr>
                             <th
@@ -84,25 +84,13 @@ export default function Tables() {
                               scope="col"
                               className="text-sm font-medium text-dark px-6 py-4 text-left"
                             >
-                              email
-                            </th>
-                            <th
-                              scope="col"
-                              className="text-sm font-medium text-dark px-6 py-4 text-left"
-                            >
                               Role
                             </th>
                             <th
                               scope="col"
                               className="text-sm font-medium text-dark  px-6 py-4 text-left"
                             >
-                              Edit
-                            </th>
-                            <th
-                              scope="col"
-                              className="text-sm font-medium text-dark  px-6 py-4 text-left"
-                            >
-                              Delete
+                              Action
                             </th>
                           </tr>
                         </thead>

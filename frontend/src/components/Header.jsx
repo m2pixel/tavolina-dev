@@ -25,7 +25,7 @@ function Header() {
   return (
     <>
       {user && (
-        <header className="bg-dark py-2 md:py-2 mb-10">
+        <header className="bg-dark py-2 md:py-2 md:mb-10">
           <div className="container px-5 md:mx-auto flex flex-row justify-between text-primary">
             <div className="flex items-center md:text-4xl hover:text-secondary">
               <Link to="/">

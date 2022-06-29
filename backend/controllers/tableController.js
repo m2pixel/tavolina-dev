@@ -35,6 +35,7 @@ const setTable = asyncHandler(async (req, res) => {
 
   const table = await Table.create({
     name: req.body.name,
+    order: req.body.order,
     // user: req.user.id,
   })
 
@@ -57,7 +58,10 @@ const openTable = asyncHandler(async (req, res) => {
 // @route   PUT /api/tables/:id
 // @access  Private
 const closeTable = asyncHandler(async (req, res) => {
-  await Table.updateOne({ _id: req.params.id }, { $set: { opened: false } })
+  await Table.updateOne(
+    { _id: req.params.id },
+    { $set: { order: [], opened: false } }
+  )
 
   await Order.updateMany({ table: req.params.id }, { $set: { paid: true } })
 

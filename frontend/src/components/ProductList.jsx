@@ -24,7 +24,7 @@ export default function ProductList({ category, add }) {
         title={product.name}
         obj={product}
         action={add}
-        // buttonStyle="bg-dark underline underline-offset-8 decoration-secondary text-white hover:text-secondary"
+        buttonStyle={8}
       />
     )
   })

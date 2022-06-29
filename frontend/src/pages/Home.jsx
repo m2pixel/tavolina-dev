@@ -44,11 +44,11 @@ export default function Home() {
   ))
 
   return (
-    <div className="space-grotesk">
+    <div className="container mx-auto space-grotesk my-5">
       {isLoading || shift.isLoading ? (
         <Spinner />
       ) : (
-        <div className="container md:mx-auto">
+        <div>
           {shift.shift.length === 0 ? (
             <div className="flex justify-center">
               <button
@@ -59,7 +59,7 @@ export default function Home() {
               </button>
             </div>
           ) : (
-            <div className="flex flex-wrap gap-5 justify-between mx-6 md:justify-around">
+            <div className="flex flex-wrap gap-2 md:gap-5 justify-around md:mx-6">
               {showTables}
             </div>
           )}

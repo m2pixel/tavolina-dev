@@ -53,7 +53,7 @@ export default function Shift() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="container mx-auto">
+        <div className="md:container md:mx-auto mt-5">
           <h2 className="flex justify-center font-semibold">
             Menaxhimi i ndrrimeve
           </h2>
@@ -62,38 +62,38 @@ export default function Shift() {
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="overflow-hidden">
-                    <table className="min-w-full">
+                    <table className="w-full table-auto text-center">
                       <thead className="border-b">
                         <tr>
                           <th
                             scope="col"
-                            className="text-sm font-medium text-dark px-6 py-4 text-left"
-                          >
-                            Ndrrimi
-                          </th>
-                          <th
-                            scope="col"
-                            className="text-sm font-medium text-dark  px-6 py-4 text-left"
-                          >
-                            Kamarieri
-                          </th>
-                          <th
-                            scope="col"
-                            className="text-sm font-medium text-dark  px-6 py-4 text-left"
+                            className="text-sm font-medium text-dark px-6 py-4 text-center"
                           >
                             Hapja
                           </th>
                           <th
                             scope="col"
-                            className="text-sm font-medium text-dark  px-6 py-4 text-left"
+                            className="text-sm font-medium text-dark px-6 py-4 text-center"
+                          >
+                            Mbyllja
+                          </th>
+                          <th
+                            scope="col"
+                            className="text-sm font-medium text-dark  px-6 py-4 text-center"
+                          >
+                            Kamarieri
+                          </th>
+                          <th
+                            scope="col"
+                            className="text-sm font-medium text-dark  px-6 py-4 text-center"
                           >
                             Statusi
                           </th>
                           <th
                             scope="col"
-                            className="text-sm font-medium text-dark  px-6 py-4 text-left"
+                            className="text-sm font-medium text-dark  px-6 py-4 text-center"
                           >
-                            Mbylle
+                            Mbylle (Shfaqe)
                           </th>
                         </tr>
                       </thead>

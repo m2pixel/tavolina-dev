@@ -10,6 +10,10 @@ const tableSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    order: {
+      type: Array,
+      required: false,
+    },
   },
   {
     timestamps: true,
