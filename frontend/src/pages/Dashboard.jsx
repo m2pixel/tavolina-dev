@@ -104,7 +104,7 @@ function Dashboard() {
         <Spinner />
       ) : (
         <div className="container md:mx-auto my-5">
-          <div className="flex flex-col md:flex-row lg:flex-wrap justify-center  md:gap-5">
+          <div className="flex flex-col md:flex-row lg:flex-wrap justify-center md:gap-5">
             <Card
               key={uuid()}
               title="Porosite e fundit"
