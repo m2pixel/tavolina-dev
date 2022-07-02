@@ -22,6 +22,8 @@ function Header() {
     setResetNav((prev) => false)
   }
 
+  // console.log('resetToggle: ', resetToggle)
+  // console.log('resetNav: ', resetNav)
   return (
     <>
       {user && (

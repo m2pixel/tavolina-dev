@@ -27,7 +27,7 @@ export default function Home() {
     if (isError) {
       console.log(message)
     }
-    // console.log('useEffect 2')
+
     if (Object.keys(shift.shift).length > 0) {
       dispatch(getTables())
     }

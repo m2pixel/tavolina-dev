@@ -67,6 +67,24 @@ export const updateOrder = createAsyncThunk(
   }
 )
 
+// change order table
+export const changeTable = createAsyncThunk(
+  'orders/changeTable',
+  async (order, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token
+      return await orderService.changeTable(order.id, order.tables, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 export const orderSlice = createSlice({
   name: 'orders',
   initialState,
@@ -110,6 +128,25 @@ export const orderSlice = createSlice({
         state.order = action.payload
       })
       .addCase(updateOrder.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(changeTable.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(changeTable.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.message = action.payload.msg
+        state.order = action.payload.order
+        state.orders = state.orders.map((order) => {
+          return order._id === action.payload.order._id
+            ? action.payload.order
+            : order
+        })
+      })
+      .addCase(changeTable.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

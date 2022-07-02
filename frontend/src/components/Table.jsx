@@ -14,7 +14,6 @@ export default function Table({ table, user }) {
     }
   }, [table.order])
 
-  console.log(lastOrder)
   const { name, total } = lastOrder
 
   const style = table.opened
@@ -36,6 +35,5 @@ export default function Table({ table, user }) {
         {table.opened && <p className="text-xs md:text-base">{user.name}</p>}
       </div>
     </div>
-    
   )
 }

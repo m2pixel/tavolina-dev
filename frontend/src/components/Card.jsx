@@ -2,7 +2,7 @@ import uuid from 'react-uuid'
 
 export default function Card({ list, title, titleHead }) {
   return (
-    <div className="w-full md:w-2/5 shadow-2xl rounded">
+    <div className="w-full md:w-1/3 shadow-2xl rounded">
       <div className="w-full bg-dark text-white py-2 uppercase text-center font-semibold rounded-t border-b-2 border-primary">
         <span>{title}</span>
       </div>

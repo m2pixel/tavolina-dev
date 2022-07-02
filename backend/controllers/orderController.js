@@ -100,9 +100,59 @@ const deleteOrder = asyncHandler(async (req, res) => {
   res.status(200).json('Order removed')
 })
 
+// @desc    Update order
+// @route   delete /api/orders/change/:id
+// @access  private
+const changeTable = asyncHandler(async (req, res) => {
+  const table = await Table.findOne({ _id: req.body.table })
+  const order = await Order.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        table: req.body.nextTable,
+      },
+    }
+  )
+
+  const updateNextTable = await Table.updateOne(
+    { _id: req.body.nextTable },
+    {
+      $set: {
+        opened: true,
+        order: table.order,
+      },
+    }
+  )
+
+  const updateTable = await Table.updateOne(
+    { _id: req.body.table },
+    {
+      $set: {
+        opened: false,
+        order: [],
+      },
+    }
+  )
+
+  if (!order) {
+    res.status(400)
+    throw new Error('Order not found')
+  }
+
+  res
+    .status(200)
+    .json({
+      msg: 'Eshte ndryshuar tavolina',
+      order,
+      table: updateTable._id,
+      nextTable: updateNextTable._id,
+    })
+})
+
 module.exports = {
   createOrder,
   getOrders,
   updateOrder,
   deleteOrder,
+  changeTable,
 }

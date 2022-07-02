@@ -12,7 +12,6 @@ export default function TableData({ currentOrder, ordersUI, deleteItem }) {
       />
     )
   })
-  console.log(ordersUI)
 
   const showCurrentOrders = currentOrder?.map((order) => {
     return (

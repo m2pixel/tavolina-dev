@@ -12,11 +12,11 @@ export default function Button(props) {
       break
     case 2:
       btn =
-        'bg-secondary text-white text-center cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 text-xl rounded shadow-xl'
+        'bg-secondary text-white text-center cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 md:text-xl rounded shadow-xl'
       break
     case 3:
       btn =
-        'bg-tableOff text-center text-white cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 text-xl rounded shadow-xl'
+        'bg-tableOff text-center text-white cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 md:text-xl rounded shadow-xl'
 
       break
     case 4:
@@ -34,11 +34,15 @@ export default function Button(props) {
       break
     case 7:
       btn =
-        'w-80 bg-dark rounded font-bold text-sm hover:bg-opacity-80 uppercase text-center text-white py-3'
+        'w-80 bg-dark rounded cursor-pointer font-bold text-sm hover:bg-opacity-80 uppercase text-center text-white py-3'
       break
     case 8:
       btn =
         'w-40 md:w-fit bg-dark text-center text-white cursor-pointer underline underline-offset-8 decoration-secondary text-white hover:text-secondary text-lg py-2 px-2 md:py-5 md:px-5 md:text-xl rounded shadow-xl'
+      break
+    case 9:
+      btn =
+        'w-full bg-dark text-center text-white cursor-pointer text-white hover:text-secondary text-lg py-2 px-2 md:py-5 md:px-5 md:text-xl rounded shadow-xl'
       break
     default:
       btn =

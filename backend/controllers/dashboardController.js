@@ -25,13 +25,30 @@ const getRecords = asyncHandler(async (req, res) => {
 })
 
 const countOrders = asyncHandler(async (req, res) => {
-  const shift = await Shift.find().sort({ _id: -1 }).limit(1)
+  const shift = await Shift.findOne().sort({ _id: -1 }).limit(1)
   const orders = await Order.find({ shift: shift._id })
 
   res.status(200).json(orders)
 })
 
+const ordersTotal = asyncHandler(async (req, res) => {
+  const shift = await Shift.findOne()
+    .sort({ _id: -1 })
+    .limit(1)
+    .populate('user', 'name')
+
+  const orders = await Order.find({ shift: shift._id })
+    .sort({ _id: -1 })
+    .limit(4)
+  let total = 0
+
+  const getTotal = orders.map((order) => (total += order.total))
+
+  res.status(200).json({ user: shift.user.name, total })
+})
+
 module.exports = {
   getOrders,
   getRecords,
+  ordersTotal,
 }

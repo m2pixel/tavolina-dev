@@ -5,6 +5,7 @@ const initialState = {
   count: 0,
   orders: [],
   records: [],
+  total: 0,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -37,6 +38,24 @@ export const getRecords = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.user.token
       return await dashboardService.getRecords(token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const ordersTotal = createAsyncThunk(
+  'dashboard/total',
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token
+      return await dashboardService.ordersTotal(token)
     } catch (error) {
       const message =
         (error.response &&
@@ -85,6 +104,19 @@ export const dashboardSlice = createSlice({
         state.records = action.payload
       })
       .addCase(getRecords.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(ordersTotal.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(ordersTotal.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.total = action.payload
+      })
+      .addCase(ordersTotal.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

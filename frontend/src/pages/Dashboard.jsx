@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import Item from '../components/dashboard/Item'
@@ -6,21 +6,25 @@ import uuid from 'react-uuid'
 import {
   getOrders,
   getRecords,
+  ordersTotal,
   reset,
 } from '../features/dashboard/dashboardSlice'
+import { faEuro, faEuroSign } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Card from '../components/Card'
 import Spinner from '../components/Spinner'
 
 function Dashboard() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { orders, records, message, isError, isSuccess, isLoading } =
+  const { orders, records, total, message, isError, isSuccess, isLoading } =
     useSelector((state) => state.dashboard)
   const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
     dispatch(getOrders())
     dispatch(getRecords())
+    dispatch(ordersTotal())
 
     if (isError) {
       console.log(message)
@@ -39,6 +43,8 @@ function Dashboard() {
 
     return convertDate.toLocaleString('de-DE')
   }
+
+  console.log(total)
 
   const initialOrders = orders?.map((order) => {
     return order?.map((o) => {
@@ -103,7 +109,18 @@ function Dashboard() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="container md:mx-auto my-5">
+        <div className="container mx-5md:mx-auto my-5">
+          <div className="flex justify-center">
+            <div className="w-full md:w-fit flex flex-row justify-center items-center border border-dark rounded px-5 py-2 mb-5 space-y-2">
+              <span className="text-secondary text-4xl">
+                <FontAwesomeIcon icon={faEuroSign} />
+              </span>
+              <div className="ml-5 font-bold text-dark">
+                <p className="text-3xl">{total.total}</p>
+                <p>{total.user}</p>
+              </div>
+            </div>
+          </div>
           <div className="flex flex-col md:flex-row lg:flex-wrap justify-center md:gap-5">
             <Card
               key={uuid()}

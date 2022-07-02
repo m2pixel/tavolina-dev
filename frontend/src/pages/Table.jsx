@@ -6,7 +6,6 @@ import {
   getTables,
   openTable,
   closeTable,
-  resetTable,
 } from '../features/tables/tableSlice'
 import { getCategories } from '../features/categories/categorySlice'
 import ProductList from '../components/ProductList'
@@ -20,14 +19,14 @@ import {
 } from '../features/orders/orderSlice'
 import { toast } from 'react-toastify'
 import {
-  faReorder,
   faAnglesLeft,
   faDollarSign,
   faCheckDouble,
 } from '@fortawesome/free-solid-svg-icons'
-import { getShift, pushOrder } from '../features/shifts/shiftSlice'
+import { getShift } from '../features/shifts/shiftSlice'
 import Button from '../components/Button'
 import uuid from 'react-uuid'
+import Modal from '../components/ChangeTableModal'
 
 export default function Table() {
   let price = 0
@@ -139,7 +138,10 @@ export default function Table() {
         })
       )
       dispatch(resetOrder())
-      navigate('/')
+      setTimeout(() => {
+        ;<Spinner />
+        navigate('/')
+      }, 300)
     }
   }
   const createOrderUI = (orders) => {
@@ -161,7 +163,10 @@ export default function Table() {
             name: concatedOrders[concatedOrders.length - 1].name,
           })
         )
-        navigate('/')
+        setTimeout(() => {
+          ;<Spinner />
+          navigate('/')
+        }, 300)
       } else {
         dispatch(
           createOrder({
@@ -181,7 +186,10 @@ export default function Table() {
           })
         )
         dispatch(openTable(table._id))
-        navigate('/')
+        setTimeout(() => {
+          ;<Spinner />
+          navigate('/')
+        }, 300)
       }
     } else {
       toast.error('Nuk keni shtuar asnje produkt')
@@ -198,12 +206,18 @@ export default function Table() {
         dispatch(closeTable(id))
         dispatch(resetOrder())
         localStorage.removeItem(table._id)
-        navigate('/')
+        setTimeout(() => {
+          ;<Spinner />
+          navigate('/')
+        }, 300)
       } else {
         dispatch(closeTable(id))
         dispatch(resetOrder())
         localStorage.removeItem(table._id)
-        navigate('/')
+        setTimeout(() => {
+          ;<Spinner />
+          navigate('/')
+        }, 300)
       }
     } else {
       toast.error('Nuk ka asnje porosi per te paguar.')
@@ -261,40 +275,47 @@ export default function Table() {
             </span>
           </div>
           <div className="flex flex-col justify-center mx-2">
-            <Button
-              title="Porosite"
-              buttonStyle={currentOrder.length > 0 ? 2 : 3}
-              obj={currentOrder}
-              action={createOrderUI}
-              icon={faCheckDouble}
-            />
+            <div className="flex flex-row">
+              <div className="w-2/4">
+                <Button
+                  title="Porosite"
+                  buttonStyle={currentOrder.length > 0 ? 2 : 3}
+                  obj={currentOrder}
+                  action={createOrderUI}
+                  icon={faCheckDouble}
+                />
+              </div>
+              <span className="mx-2"></span>
+              {ordersUI.length > 0 ? (
+                <div className="w-2/4">
+                  <Button
+                    title="Paguaj"
+                    buttonStyle={ordersUI.length > 0 ? 2 : 3}
+                    obj={table._id}
+                    action={closeOrderUI}
+                    icon={faDollarSign}
+                  />
+                </div>
+              ) : (
+                <div className="w-2/4">
+                  <Button
+                    title="Paguaj"
+                    buttonStyle={currentOrder.length > 0 ? 2 : 3}
+                    obj={currentOrder}
+                    action={orderAndPaid}
+                    icon={faDollarSign}
+                  />
+                </div>
+              )}
+            </div>
             <span className="my-2 mx-5 border border-primary"></span>
-            {ordersUI.length > 0 ? (
-              <Button
-                title="Paguaj"
-                buttonStyle={ordersUI.length > 0 ? 2 : 3}
-                obj={table._id}
-                action={closeOrderUI}
-                icon={faDollarSign}
-              />
-            ) : (
-              <Button
-                title="Paguaj"
-                buttonStyle={currentOrder.length > 0 ? 2 : 3}
-                obj={currentOrder}
-                action={orderAndPaid}
-                icon={faDollarSign}
-              />
-            )}
+            <div>
+              <Modal order={order} table={table} tables={tables} />
+            </div>
             <span className="my-2 mx-5 border border-primary"></span>
             <div className="">
               <Link to="/">
-                <Button
-                  title="Kthehu"
-                  buttonStyle={4}
-                  icon={faAnglesLeft}
-                  // action={() => 'd'}
-                />
+                <Button title="Kthehu" buttonStyle={9} icon={faAnglesLeft} />
               </Link>
             </div>
           </div>

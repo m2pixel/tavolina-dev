@@ -1,12 +1,13 @@
 const asyncHandler = require('express-async-handler')
 const Product = require('../models/productModel')
-const User = require('../models/userModel')
+// const User = require('../models/userModel')
 
 // @desc    Get products
 // @route   GET /api/products
 // @access  Private
 const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find()
+  
   res.status(200).json(products)
 })
 

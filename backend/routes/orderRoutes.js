@@ -6,6 +6,7 @@ const {
   getOrders,
   updateOrder,
   deleteOrder,
+  changeTable,
 } = require('../controllers/orderController')
 
 router.route('/').post(protect, createOrder)
@@ -14,5 +15,6 @@ router
   .get(protect, getOrders)
   .put(protect, updateOrder)
   .delete(protect, deleteOrder)
+router.put('/change/:id', changeTable)
 
 module.exports = router

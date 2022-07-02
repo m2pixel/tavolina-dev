@@ -28,7 +28,7 @@ const getOrders = async (orderId, token) => {
   return response.data
 }
 
-// Get orders
+// update order
 const updateOrder = async (orderId, orders, token) => {
   const config = {
     headers: {
@@ -37,6 +37,23 @@ const updateOrder = async (orderId, orders, token) => {
   }
 
   const response = await axios.put(API_URL + orderId, orders, config)
+
+  return response.data
+}
+
+// change table
+const changeTable = async (orderId, tables, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.put(
+    API_URL + 'change/' + orderId,
+    tables,
+    config
+  )
 
   return response.data
 }
@@ -72,6 +89,7 @@ const orderService = {
   createOrder,
   getOrders,
   updateOrder,
+  changeTable,
 }
 
 export default orderService
