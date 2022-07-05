@@ -9,7 +9,7 @@ const Shift = require('../models/shiftModel')
 const getOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({}, { orders: 1, createdAt: 1, _id: 0 })
     .sort({ _id: -1 })
-    .limit(6)
+    .limit(10)
     .populate('table', 'name')
 
   res.status(200).json(orders)
@@ -38,11 +38,11 @@ const ordersTotal = asyncHandler(async (req, res) => {
     .populate('user', 'name')
 
   const orders = await Order.find({ shift: shift._id })
-    .sort({ _id: -1 })
-    .limit(4)
-  let total = 0
 
-  const getTotal = orders.map((order) => (total += order.total))
+  let totalOrders = 0
+
+  const getTotal = orders.map((order) => (totalOrders += order.total))
+  const total = totalOrders.toFixed(2)
 
   res.status(200).json({ user: shift.user.name, total })
 })

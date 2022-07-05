@@ -17,8 +17,11 @@ const createOrder = asyncHandler(async (req, res) => {
     shift: req.body.shift,
     orders: req.body.orders,
     total: req.body.total.toFixed(2),
+    message: req.body.msg,
     paid: req.body.paid,
   })
+
+  console.log(req.body.msg)
 
   if (order) {
     await Table.updateOne(
@@ -58,6 +61,7 @@ const updateOrder = asyncHandler(async (req, res) => {
       $set: {
         orders: req.body.orders,
         total: req.body.total.toFixed(2),
+        message: req.body.msg,
         paid: req.body.paid,
       },
     },
@@ -139,14 +143,12 @@ const changeTable = asyncHandler(async (req, res) => {
     throw new Error('Order not found')
   }
 
-  res
-    .status(200)
-    .json({
-      msg: 'Eshte ndryshuar tavolina',
-      order,
-      table: updateTable._id,
-      nextTable: updateNextTable._id,
-    })
+  res.status(200).json({
+    msg: 'Eshte ndryshuar tavolina',
+    order,
+    table: updateTable._id,
+    nextTable: updateNextTable._id,
+  })
 })
 
 module.exports = {

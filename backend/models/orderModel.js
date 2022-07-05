@@ -19,10 +19,14 @@ const orderSchema = mongoose.Schema(
     },
     orders: {
       type: Array,
-      required: false,
+      required: true,
     },
     total: {
       type: Number,
+      required: false,
+    },
+    message: {
+      type: String,
       required: false,
     },
     paid: {

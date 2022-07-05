@@ -38,6 +38,8 @@ export default function Table() {
   const { order, isSuccess, isLoading, message } = useSelector(
     (state) => state.orders
   )
+  const [orderMsg, setOrderMsg] = useState('')
+  const [msg, setMsg] = useState('')
   const [ordersUI, setOrdersUI] = useState([])
   const [currentOrder, setCurrentOrder] = useState([])
   const { name } = useParams()
@@ -69,8 +71,10 @@ export default function Table() {
 
   useEffect(() => {
     if (isSuccess) {
-      if (order.table === id && !order.paid) setOrdersUI(order.orders)
-      else setOrdersUI([])
+      if (order.table === id && !order.paid) {
+        setOrdersUI(order.orders)
+        setMsg(order.message)
+      } else setOrdersUI([])
     }
 
     /**
@@ -83,7 +87,7 @@ export default function Table() {
       setCurrentCategory((prev) => categories.categories[0].name)
     }
   }, [order, id, isSuccess, message, categories.isSuccess])
-
+  console.log(order)
   // set current category
   const changeCategory = (c) => {
     setCurrentCategory((prev) => c.name)
@@ -153,6 +157,7 @@ export default function Table() {
             id: order._id,
             orders: concatedOrders,
             total: price,
+            msg: orderMsg,
             paid: false,
           })
         )
@@ -175,6 +180,7 @@ export default function Table() {
             shift: shift._id,
             orders: currentOrder,
             total: price,
+            msg: orderMsg,
             paid: false,
           })
         )
@@ -201,7 +207,12 @@ export default function Table() {
       if (currentOrder.length > 0) {
         const concatedOrders = ordersUI.concat(currentOrder)
         dispatch(
-          updateOrder({ id: order._id, orders: concatedOrders, paid: true })
+          updateOrder({
+            id: order._id,
+            orders: concatedOrders,
+            msg: orderMsg,
+            paid: true,
+          })
         )
         dispatch(closeTable(id))
         dispatch(resetOrder())
@@ -233,7 +244,7 @@ export default function Table() {
   const addCurrentOrderPrice = currentOrder.map(
     (order) => (price += order.price)
   )
-
+  console.log(order)
   return (
     <div className="md:mx-10 md:my-10 font-space-grotesk text-dark">
       <div className="flex flex-col md:flex-row md:space-x-5">
@@ -262,11 +273,20 @@ export default function Table() {
               ordersUI={ordersUI}
             />
           )}
+          {msg && (
+            <div className="mx-2">
+              <p className="text-xs opacity-80 normal-case">
+                <span className="font-bold">Messazhi: </span>
+                {msg}
+              </p>
+            </div>
+          )}
           <div className="flex justify-end py-2 mx-2 space-x-3">
             <input
               type="text"
-              name="order_msg"
-              id="order_msg"
+              name="orderMsg"
+              id="orderMsg"
+              onChange={(e) => setOrderMsg((prev) => e.target.value)}
               placeholder="Defino porosine"
               className="w-3/5 border border-secondary bg-secondary bg-opacity-20  text-dark placeholder-dark px-2"
             />
