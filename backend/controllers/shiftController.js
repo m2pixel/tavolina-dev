@@ -5,20 +5,27 @@ const Record = require('../models/recordModel')
 const asyncHandler = require('express-async-handler')
 
 const createShift = asyncHandler(async (req, res) => {
+  const countShift = await Shift.find({ user: req.body.id, closed: false })
+
   if (!req.body.id) {
     res.status(400)
-    throw new Error('User not found')
+    throw new Error('Perdoruesi nuk eshte gjetur')
+  }
+
+  if (countShift > 0) {
+    res.status(400)
+    throw new Error('Kamarieri e ka ndrrimin e hapur')
   }
 
   const shift = await Shift.create({
     user: req.body.id,
   })
 
-  res.status(200).json({ msg: 'Shift created!' })
+  res.status(200).json({ msg: 'Shift created!', shift })
 })
 
 const getShifts = asyncHandler(async (req, res) => {
-  const shifts = await Shift.find().sort({ _id: -1 })
+  const shifts = await Shift.find().sort({ _id: -1 }).populate('user', 'name')
 
   if (!shifts) {
     res.status(400)
@@ -30,12 +37,7 @@ const getShifts = asyncHandler(async (req, res) => {
 
 const getShift = asyncHandler(async (req, res) => {
   const shift = await Shift.findOne({ user: req.params.id, closed: false })
-
-  if (!shift) {
-    res.status(400)
-    throw new Error('You have no shift 1')
-  }
-
+  console.log(shift)
   res.status(200).json(shift)
 })
 
@@ -59,7 +61,10 @@ const pushOrder = asyncHandler(async (req, res) => {
 
 const closeShift = asyncHandler(async (req, res) => {
   let shiftOrders = []
-  const countOrders = await Order.find({ paid: false }).count()
+  const countOrders = await Order.find({
+    user: req.body.user,
+    paid: false,
+  }).count()
 
   // close all tables before closing shift
   if (countOrders > 0) {
@@ -82,8 +87,6 @@ const closeShift = asyncHandler(async (req, res) => {
 
     return price.toFixed(2)
   }
-
-  // console.log('orders: ', orders)
 
   const shift = await Shift.findOneAndUpdate(
     { _id: req.params.id },
@@ -111,7 +114,6 @@ const closeShift = asyncHandler(async (req, res) => {
     orders: shiftOrders,
     total: getPrice(shiftOrders),
   })
-
   res.status(200).json({ msg: 'Ndrrimi u mbyll', shift })
 })
 

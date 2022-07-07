@@ -21,14 +21,16 @@ const createOrder = asyncHandler(async (req, res) => {
     paid: req.body.paid,
   })
 
-  console.log(req.body.msg)
-
   if (order) {
     await Table.updateOne(
       { _id: order.table },
       {
         $set: {
-          order: [order.total, order.orders[order.orders.length - 1].name],
+          order: [
+            order.total,
+            order.orders[order.orders.length - 1].name,
+            req.body.userName,
+          ],
         },
       }
     )
@@ -81,7 +83,11 @@ const updateOrder = asyncHandler(async (req, res) => {
       { _id: order.table },
       {
         $set: {
-          order: [order.total, order.orders[order.orders.length - 1].name],
+          order: [
+            order.total,
+            order.orders[order.orders.length - 1].name,
+            req.body.userName,
+          ],
         },
       }
     )

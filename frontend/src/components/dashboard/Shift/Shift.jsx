@@ -16,16 +16,16 @@ export default function Shift() {
   const { shifts, isLoading, message, isError, isSuccess } = useSelector(
     (state) => state.shifts
   )
-  const { users } = useSelector((state) => state.users)
 
   useEffect(() => {
     dispatch(getShifts())
-    dispatch(getUsers())
 
     if (isError) {
-      message !== '' && toast.error(message)
-    } else if (isSuccess) {
-      message !== '' && toast.info(message)
+      toast.error(message)
+    }
+
+    if (isSuccess && message !== '') {
+      toast.info(message)
     }
 
     return () => {
@@ -37,16 +37,22 @@ export default function Shift() {
     dispatch(closeShift(id))
   }
 
+  console.log(shifts)
+
   const shiftList = shifts?.map((shift) => {
-    let name = ''
-    users.map((user) => {
-      if (shift.user === user._id) {
-        name = user.name
-      }
-      return name
-    })
-    return <ShiftItem key={shift._id} shift={shift} user={name} close={close} />
+    return <ShiftItem key={shift._id} shift={shift} close={close} />
   })
+
+  // const shiftList = shifts?.map((shift) => {
+  //   let name = ''
+  //   users.map((user) => {
+  //     if (shift.user === user._id) {
+  //       name = user.name
+  //     }
+  //     return name
+  //   })
+  //   return <ShiftItem key={shift._id} shift={shift} user={name} close={close} />
+  // })
 
   return (
     <>

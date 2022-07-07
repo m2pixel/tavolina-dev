@@ -7,6 +7,7 @@ import {
   openTable,
   closeTable,
 } from '../features/tables/tableSlice'
+import { userPermission, reset } from '../features/users/userSlice'
 import { getCategories } from '../features/categories/categorySlice'
 import ProductList from '../components/ProductList'
 import TableData from '../components/TableData'
@@ -47,12 +48,14 @@ export default function Table() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
+  const stateUser = useSelector((state) => state.users)
 
   useEffect(() => {
     dispatch(getCategories())
     dispatch(getTable(id))
     dispatch(getTables())
     dispatch(getShift(user._id))
+    dispatch(userPermission(user._id))
 
     if (tables.length > 0) {
       const filterTables = tables?.filter((table) => table._id === id)
@@ -61,11 +64,18 @@ export default function Table() {
     }
 
     price = 0
-  }, [dispatch, name, isError])
+    return () => {
+      dispatch(reset())
+    }
+  }, [dispatch, name, isError, user._id])
 
   useEffect(() => {
     if (id !== undefined) {
       dispatch(getOrders(id))
+    }
+
+    return () => {
+      dispatch(resetOrder())
     }
   }, [dispatch, id])
 
@@ -87,7 +97,17 @@ export default function Table() {
       setCurrentCategory((prev) => categories.categories[0].name)
     }
   }, [order, id, isSuccess, message, categories.isSuccess])
-  console.log(order)
+
+  useEffect(() => {
+    if (Object.keys(order).length > 0) {
+      if (order.user !== user._id && !stateUser.permission) {
+        toast.info('Nuk eshte tavolina juaj')
+        navigate('/')
+      }
+    }
+  }, [order, navigate, user._id])
+
+
   // set current category
   const changeCategory = (c) => {
     setCurrentCategory((prev) => c.name)
@@ -135,6 +155,7 @@ export default function Table() {
         createOrder({
           table: table._id,
           user: user._id,
+          userName: user.name,
           shift: shift._id,
           orders: currentOrder,
           total: price,
@@ -156,16 +177,10 @@ export default function Table() {
           updateOrder({
             id: order._id,
             orders: concatedOrders,
+            userName: user.name,
             total: price,
             msg: orderMsg,
             paid: false,
-          })
-        )
-        localStorage.setItem(
-          table._id,
-          JSON.stringify({
-            total: price,
-            name: concatedOrders[concatedOrders.length - 1].name,
           })
         )
         setTimeout(() => {
@@ -177,18 +192,12 @@ export default function Table() {
           createOrder({
             table: table._id,
             user: user._id,
+            userName: user.name,
             shift: shift._id,
             orders: currentOrder,
             total: price,
             msg: orderMsg,
             paid: false,
-          })
-        )
-        localStorage.setItem(
-          table._id,
-          JSON.stringify({
-            total: price,
-            name: currentOrder[currentOrder.length - 1].name,
           })
         )
         dispatch(openTable(table._id))
@@ -216,7 +225,6 @@ export default function Table() {
         )
         dispatch(closeTable(id))
         dispatch(resetOrder())
-        localStorage.removeItem(table._id)
         setTimeout(() => {
           ;<Spinner />
           navigate('/')
@@ -224,7 +232,6 @@ export default function Table() {
       } else {
         dispatch(closeTable(id))
         dispatch(resetOrder())
-        localStorage.removeItem(table._id)
         setTimeout(() => {
           ;<Spinner />
           navigate('/')
@@ -244,7 +251,7 @@ export default function Table() {
   const addCurrentOrderPrice = currentOrder.map(
     (order) => (price += order.price)
   )
-  console.log(order)
+
   return (
     <div className="md:mx-10 md:my-10 font-space-grotesk text-dark">
       <div className="flex flex-col md:flex-row md:space-x-5">

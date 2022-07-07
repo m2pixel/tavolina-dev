@@ -8,8 +8,8 @@ export default function ShiftItem({ shift, user, close }) {
   return (
     <tr className="border-b">
       <td className="text-sm text-dark ">{convertDate(shift.createdAt)}</td>
-      <td className="text-sm text-dark ">{convertDate(shift.createdAt)}</td>
-      <td className="text-sm text-dark ">{user}</td>
+      <td className="text-sm text-dark ">{convertDate(shift.updatedAt)}</td>
+      <td className="text-sm text-dark ">{shift.user.name}</td>
       <td className="text-sm text-dark ">
         {shift.closed ? 'Mbyllur' : 'Hapur'}
       </td>
@@ -20,7 +20,7 @@ export default function ShiftItem({ shift, user, close }) {
               ? 'bg-gray-300 text-white px-2 py-1 rounded font-semibold'
               : 'bg-primary text-white px-2 py-1 rounded font-semibold'
           }
-          onClick={() => close(shift._id)}
+          onClick={() => close({ id: shift._id, user: shift.user._id})}
           disabled={shift.closed ? true : false}
         >
           Mbylle

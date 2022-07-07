@@ -50,14 +50,14 @@ const pushOrder = async (id, orderId, token) => {
   return response.data
 }
 
-const closeShift = async (shiftId, token) => {
+const closeShift = async (shiftId,shift, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }
 
-  const response = await axios.put(API_URL + shiftId, config)
+  const response = await axios.put(API_URL + shiftId,shift, config)
 
   return response.data
 }

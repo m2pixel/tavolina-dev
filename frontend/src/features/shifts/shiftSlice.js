@@ -84,10 +84,10 @@ export const pushOrder = createAsyncThunk(
 
 export const closeShift = createAsyncThunk(
   'shifts/close',
-  async (shiftId, thunkAPI) => {
+  async (shift, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await shiftService.closeShift(shiftId, token)
+      return await shiftService.closeShift(shift.id, shift, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -114,7 +114,7 @@ export const shiftSlice = createSlice({
       .addCase(createShift.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.shifts.push(action.payload)
+        state.shift = action.payload.shift
       })
       .addCase(createShift.rejected, (state, action) => {
         state.isLoading = false
@@ -127,7 +127,7 @@ export const shiftSlice = createSlice({
       .addCase(getShift.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.shift = action.payload
+        state.shift = action.payload === null ? [] : action.payload
       })
       .addCase(getShift.rejected, (state, action) => {
         state.isLoading = false
@@ -167,6 +167,8 @@ export const shiftSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.message = action.payload.msg
+        state.shift =
+          state.shift._id === action.payload.shift._id ? [] : state.shift
         state.shifts = state.shifts.map((shift) => {
           return shift._id === action.payload.shift._id
             ? action.payload.shift

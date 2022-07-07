@@ -12,7 +12,7 @@ import {
   faHouse,
 } from '@fortawesome/free-solid-svg-icons'
 
-export default function NavigateIcons({ resetNav, resetToggle }) {
+export default function NavigateIcons({ isHome, resetToggle }) {
   const [nav, setNav] = useState([
     {
       id: 0,
@@ -52,12 +52,12 @@ export default function NavigateIcons({ resetNav, resetToggle }) {
       icon: faCalendarDays,
     },
   ])
-
+  
   useEffect(() => {
-    if (resetNav) {
+    if (isHome) {
       setNav((prev) => prev.map((n) => ({ ...n, clicked: false })))
     }
-  }, [resetNav])
+  }, [isHome])
 
   const toggleNav = (id) => {
     setNav(
@@ -71,12 +71,11 @@ export default function NavigateIcons({ resetNav, resetToggle }) {
 
   const showNav = nav.map((nav) => {
     return (
-      <Link key={nav.id} to={`dashboard/${nav.url}`}>
+      <Link key={nav.id} to={`dashboard/${nav.url}`} onClick={() => resetToggle()}>
         <Icon
           key={nav.id}
           toggle={toggleNav}
           icon={nav}
-          onClick={() => resetToggle()}
         />
       </Link>
     )

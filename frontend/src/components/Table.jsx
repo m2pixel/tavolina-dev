@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 
-export default function Table({ table, user }) {
+export default function Table({ table }) {
   // const [lastOrder, setLastOrder] = useState({ name: '', total: 0 })
-  const [lastOrder, setLastOrder] = useState({ name: '', total: 0 })
+  const [lastOrder, setLastOrder] = useState({ name: '', total: 0, user: '' })
   useEffect(() => {
     // const item = JSON.parse(localStorage.getItem(table._id))
 
@@ -10,11 +10,15 @@ export default function Table({ table, user }) {
     //   setLastOrder(item)
     // }
     if (table.order.length > 0) {
-      setLastOrder({ name: table.order[1], total: table.order[0] })
+      setLastOrder({
+        total: table.order[0],
+        name: table.order[1],
+        user: table.order[2],
+      })
     }
   }, [table.order])
 
-  const { name, total } = lastOrder
+  const { name, total, user } = lastOrder
 
   const style = table.opened
     ? 'w-24 h-32 md:w-40 md:h-48 bg-tableOff text-white rounded font-space-grotesk py-2 text-center shadow-xl'
@@ -32,7 +36,7 @@ export default function Table({ table, user }) {
             {name}
           </p>
         )}
-        {table.opened && <p className="text-xs md:text-base">{user.name}</p>}
+        {table.opened && <p className="text-xs md:text-base">{user}</p>}
       </div>
     </div>
   )

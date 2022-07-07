@@ -19,7 +19,9 @@ const getOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/dashboard/
 // @access  Private
 const getRecords = asyncHandler(async (req, res) => {
-  const records = await Record.find().sort({ _id: -1 }).limit(10)
+  const records = await Record.find({ total: { $gt: 0 } })
+    .sort({ _id: -1 })
+    .limit(10)
 
   res.status(200).json(records)
 })
