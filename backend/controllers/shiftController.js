@@ -37,7 +37,7 @@ const getShifts = asyncHandler(async (req, res) => {
 
 const getShift = asyncHandler(async (req, res) => {
   const shift = await Shift.findOne({ user: req.params.id, closed: false })
-  console.log(shift)
+
   res.status(200).json(shift)
 })
 
