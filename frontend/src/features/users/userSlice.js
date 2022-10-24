@@ -108,7 +108,7 @@ export const deleteUser = createAsyncThunk(
 
 // user permission
 export const userPermission = createAsyncThunk(
-  'users/role',
+  'users/permission',
   async (id, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
@@ -125,7 +125,7 @@ export const userPermission = createAsyncThunk(
   }
 )
 export const userSlice = createSlice({
-  name: 'user',
+  name: 'users',
   initialState,
   reducers: {
     reset: (state) => initialState,
@@ -217,6 +217,7 @@ export const userSlice = createSlice({
       .addCase(userPermission.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.user = action.payload.user
         state.permission = action.payload.permission
       })
       .addCase(userPermission.rejected, (state, action) => {

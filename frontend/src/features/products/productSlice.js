@@ -177,6 +177,7 @@ export const productSlice = createSlice({
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.message = action.payload.msg
         state.products = state.products.filter(
           (product) => product._id !== action.payload.id
         )

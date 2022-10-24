@@ -9,7 +9,9 @@ function ProductForm({ reload, message }) {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
+    qty: '',
     category: '',
+    unlimited: false,
   })
   const { categories } = useSelector((state) => state.categories)
   const dispatch = useDispatch()
@@ -19,14 +21,16 @@ function ProductForm({ reload, message }) {
   }, [dispatch])
 
   const { name, price, category } = formData
+  
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value, type, checked } = e.target
 
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }))
   }
+
   const onSubmit = (e) => {
     e.preventDefault()
 
@@ -37,7 +41,7 @@ function ProductForm({ reload, message }) {
       reload()
     }
   }
-
+  console.log(formData)
   const showCategories = categories.map((category) => {
     return (
       <option value={category.name} key={category._id}>
@@ -72,18 +76,28 @@ function ProductForm({ reload, message }) {
             onChange={handleChange}
             placeholder="Sheno cmimin"
           />
-          <div className="form-group">
-            <select
-              name="category"
-              id="role"
-              value={formData.category}
+          <select
+            name="category"
+            id="role"
+            value={formData.category}
+            onChange={handleChange}
+            className="w-full py-2 px-5 text-dark border border-dark rounded"
+          >
+            <option>-- Kategoria --</option>
+            {showCategories}
+          </select>
+          <label htmlFor="unlimited" className="space-x-3 text-gray-500">
+            <input
+              type="checkbox"
+              name="unlimited"
+              id="unlimited"
+              className="text-dark border border-dark rounded py-2 px-2"
+              value={formData.unlimited}
               onChange={handleChange}
-              className="w-full py-2 px-5 text-dark border border-dark rounded"
-            >
-              <option>-- Kategoria --</option>
-              {showCategories}
-            </select>
-          </div>
+              placeholder="Sheno cmimin"
+            />
+            <span>Produkti nuk ka sasi</span>
+          </label>
           <Button title="Shto produkt" buttonStyle={7} />
           <Button
             title="Kthehu mbrapa"

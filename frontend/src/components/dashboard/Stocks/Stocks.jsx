@@ -1,32 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import ProductItem from './ProductItem'
-import ProductForm from './ProductForm'
+import StockItem from './StockItem'
+import StockForm from './StockForm'
 import { toast } from 'react-toastify'
 import {
-  getProducts,
-  deleteProduct,
+  getStocks,
+  deleteStock,
   reset,
-} from '../../../features/products/productSlice'
+} from '../../../features/stock/stockSlice'
+import { getProducts } from '../../../features/products/productSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import Spinner from '../../Spinner'
 import Button from '../../Button'
-export default function Products() {
+
+export default function Stocks() {
   const [showForm, setShowForm] = useState(false)
   const dispatch = useDispatch()
   // const navigate = useNavigator()
-  const { products, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.products
+  const { stocks, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.stocks
   )
+  const products = useSelector((state) => state.products)
 
-  const deleteProductUI = (id) => {
-    if (id) {
-      dispatch(deleteProduct(id))
-    }
-  }
-
-  const reloadAfterAddProduct = () => {
+  const reload = () => {
     setShowForm((prev) => false)
   }
 
@@ -37,6 +34,7 @@ export default function Products() {
       toast.success(message)
     }
 
+    dispatch(getStocks())
     dispatch(getProducts())
 
     return () => {
@@ -44,13 +42,15 @@ export default function Products() {
     }
   }, [isError, message, dispatch])
 
-  const productItems = products.map((product) => {
+  const deleteStockUI = (id) => {
+    if (id) {
+      dispatch(deleteStock(id))
+    }
+  }
+
+  const stockItems = stocks?.map((stock) => {
     return (
-      <ProductItem
-        key={product._id}
-        product={product}
-        deleteProduct={deleteProductUI}
-      />
+      <StockItem key={stock._id} stock={stock} deleteStock={deleteStockUI} />
     )
   })
 
@@ -64,15 +64,15 @@ export default function Products() {
       ) : (
         <div className="container mx-auto">
           <h2 className="flex justify-center font-semibold">
-            Menaxhimi i produkteve
+            Menaxhimi i stokut
           </h2>
           {showForm ? (
-            <ProductForm reload={reloadAfterAddProduct} message={message} />
+            <StockForm reload={reload} />
           ) : (
             <div>
               <div className="flex justify-end mx-5 my-5">
                 <Button
-                  title="Shto produkt"
+                  title="Shto ne stok"
                   icon={faPlus}
                   action={toggle}
                   buttonStyle={5}
@@ -89,13 +89,7 @@ export default function Products() {
                               scope="col"
                               className="text-sm font-medium text-dark px-6 py-4 text-left"
                             >
-                              Name
-                            </th>
-                            <th
-                              scope="col"
-                              className="text-sm font-medium text-dark  px-6 py-4 text-left"
-                            >
-                              Price
+                              Produkti
                             </th>
                             <th
                               scope="col"
@@ -107,13 +101,7 @@ export default function Products() {
                               scope="col"
                               className="text-sm font-medium text-dark  px-6 py-4 text-left"
                             >
-                              Category
-                            </th>
-                            <th
-                              scope="col"
-                              className="text-sm font-medium text-dark  px-6 py-4 text-left"
-                            >
-                              Edit
+                              Data
                             </th>
                             <th
                               scope="col"
@@ -123,7 +111,7 @@ export default function Products() {
                             </th>
                           </tr>
                         </thead>
-                        <tbody>{productItems}</tbody>
+                        <tbody>{stockItems}</tbody>
                       </table>
                     </div>
                   </div>

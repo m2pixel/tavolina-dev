@@ -7,7 +7,7 @@ const Product = require('../models/productModel')
 // @access  Private
 const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find()
-  
+
   res.status(200).json(products)
 })
 
@@ -31,13 +31,14 @@ const getProduct = asyncHandler(async (req, res) => {
 const setProduct = asyncHandler(async (req, res) => {
   if (!req.body.name || !req.body.price || !req.body.category) {
     res.status(400)
-    throw new Error('Please enter product name,price and category.')
+    throw new Error('Ju lutem plotesoni te gjitha te dhenat')
   }
 
   const product = await Product.create({
     name: req.body.name,
     price: req.body.price,
     category: req.body.category,
+    unlimited: req.body.unlimited,
   })
 
   res.status(200).json({ msg: 'Produkti u shtua', product })
@@ -61,6 +62,7 @@ const updateProduct = asyncHandler(async (req, res) => {
         name: req.body.name,
         price: req.body.price,
         category: req.body.category,
+        unlimited: req.body.unlimited,
       },
     },
     {
@@ -81,7 +83,9 @@ const deleteProduct = asyncHandler(async (req, res) => {
     req.status(400)
     throw new Error('Product didnt deleted')
   }
-  res.status(200).json({ message: 'Product removed' })
+  res
+    .status(200)
+    .json({ msg: `Produkti ${product.name} u fshi`, id: product._id })
 })
 
 module.exports = {

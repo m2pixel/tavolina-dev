@@ -71,6 +71,7 @@ export default function ChangeTableModal({ order, table, tables }) {
                     name="id"
                     onChange={(e) => setNextTable((prev) => e.target.value)}
                   >
+                    <option>**</option>
                     {getTables}
                   </select>
                 </div>

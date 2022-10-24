@@ -29,7 +29,8 @@ import Button from '../components/Button'
 import uuid from 'react-uuid'
 import Modal from '../components/ChangeTableModal'
 
-export default function Table() {
+export default function Table({ permission }) {
+  console.log('perm: ', permission)
   let price = 0
   // current category
   const [currentCategory, setCurrentCategory] = useState('')
@@ -55,7 +56,7 @@ export default function Table() {
     dispatch(getTable(id))
     dispatch(getTables())
     dispatch(getShift(user._id))
-    dispatch(userPermission(user._id))
+    // dispatch(userPermission(user._id))
 
     if (tables.length > 0) {
       const filterTables = tables?.filter((table) => table._id === id)
@@ -64,6 +65,7 @@ export default function Table() {
     }
 
     price = 0
+
     return () => {
       dispatch(reset())
     }
@@ -72,6 +74,7 @@ export default function Table() {
   useEffect(() => {
     if (id !== undefined) {
       dispatch(getOrders(id))
+      dispatch(userPermission(user._id))
     }
 
     return () => {
@@ -80,6 +83,9 @@ export default function Table() {
   }, [dispatch, id])
 
   useEffect(() => {
+    if (isError) {
+      console.log(message)
+    }
     if (isSuccess) {
       if (order.table === id && !order.paid) {
         setOrdersUI(order.orders)
@@ -97,16 +103,15 @@ export default function Table() {
       setCurrentCategory((prev) => categories.categories[0].name)
     }
   }, [order, id, isSuccess, message, categories.isSuccess])
-
+  console.log(stateUser.permission)
   useEffect(() => {
     if (Object.keys(order).length > 0) {
-      if (order.user !== user._id && !stateUser.permission) {
+      if (order.user !== user._id && !permission) {
         toast.info('Nuk eshte tavolina juaj')
         navigate('/')
       }
     }
   }, [order, navigate, user._id])
-
 
   // set current category
   const changeCategory = (c) => {
@@ -215,11 +220,13 @@ export default function Table() {
     if (ordersUI.length > 0) {
       if (currentOrder.length > 0) {
         const concatedOrders = ordersUI.concat(currentOrder)
+        console.log('curr', concatedOrders)
         dispatch(
           updateOrder({
             id: order._id,
             orders: concatedOrders,
             msg: orderMsg,
+            total: price,
             paid: true,
           })
         )
@@ -278,6 +285,7 @@ export default function Table() {
               currentOrder={currentOrder}
               deleteItem={deleteItem}
               ordersUI={ordersUI}
+              canDelete={stateUser.permission}
             />
           )}
           {msg && (
@@ -294,7 +302,7 @@ export default function Table() {
               name="orderMsg"
               id="orderMsg"
               onChange={(e) => setOrderMsg((prev) => e.target.value)}
-              placeholder="Defino porosine"
+              placeholder="Lë nje mesazh"
               className="w-3/5 border border-secondary bg-secondary bg-opacity-20  text-dark placeholder-dark px-2"
             />
             <span className="w-2/5 text-center bg-tableOn font-bold text-xl py-2">
@@ -302,19 +310,20 @@ export default function Table() {
             </span>
           </div>
           <div className="flex flex-col justify-center mx-2">
-            <div className="flex flex-row">
-              <div className="w-2/4">
+            <div className="flex flex-row md:flex-col lg:flex-row gap-2">
+              <div className="w-2/4 md:w-full lg:w-2/4">
                 <Button
                   title="Porosite"
                   buttonStyle={currentOrder.length > 0 ? 2 : 3}
                   obj={currentOrder}
                   action={createOrderUI}
                   icon={faCheckDouble}
+                  t
                 />
               </div>
-              <span className="mx-2"></span>
+              <span className="sm:invisible lg:invisible md:visible md:mx-5 lg:mx-0 md:border lg:border-secondary border-primary"></span>
               {ordersUI.length > 0 ? (
-                <div className="w-2/4">
+                <div className="w-2/4 md:w-full lg:w-2/4">
                   <Button
                     title="Paguaj"
                     buttonStyle={ordersUI.length > 0 ? 2 : 3}
@@ -324,7 +333,7 @@ export default function Table() {
                   />
                 </div>
               ) : (
-                <div className="w-2/4">
+                <div className="w-2/4 md:w-full lg:w-2/4">
                   <Button
                     title="Paguaj"
                     buttonStyle={currentOrder.length > 0 ? 2 : 3}

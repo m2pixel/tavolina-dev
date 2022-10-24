@@ -65,12 +65,6 @@ export default function Calendar() {
                           <tr>
                             <th
                               scope="col"
-                              className="text-sm font-medium text-dark px-6 py-4 text-left"
-                            >
-                              Ndrrimi
-                            </th>
-                            <th
-                              scope="col"
                               className="text-sm font-medium text-dark  px-6 py-4 text-left"
                             >
                               Kamarieri

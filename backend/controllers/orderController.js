@@ -57,18 +57,21 @@ const getOrders = asyncHandler(async (req, res) => {
 // @route   PUT /api/orders/:id
 // @access  private
 const updateOrder = asyncHandler(async (req, res) => {
+  const fixTotal = req.body.total.toFixed(2)
   const order = await Order.findOneAndUpdate(
     { _id: req.params.id },
     {
       $set: {
         orders: req.body.orders,
-        total: req.body.total.toFixed(2),
+        total: fixTotal,
         message: req.body.msg,
         paid: req.body.paid,
       },
     },
     { new: true }
   )
+
+  console.log(req.body.orders)
 
   if (!req.body.orders) {
     res.status(400)

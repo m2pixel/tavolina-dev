@@ -16,14 +16,13 @@ export default function EditUser() {
     name: '',
     price: '',
     category: '',
-    unlimited: false,
   })
   const { categories } = useSelector((state) => state.categories)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { name, price, category, unlimited } = formData
+  const { name, price, category } = formData
   const { product, isSuccess, isError, message, isLoading } = useSelector(
     (state) => state.products
   )
@@ -37,32 +36,28 @@ export default function EditUser() {
     }
 
     if (isSuccess && Object.keys(product).length > 0) {
+      console.log('true')
       setFormData((prev) => ({
         ...prev,
         name: product.name,
         price: product.price,
         category: product.category,
-        unlimited: product.unlimited,
       }))
     }
   }, [id, isSuccess, dispatch, isError])
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
     }))
   }
-  console.log(formData)
-
   const onSubmit = (e) => {
     e.preventDefault()
     if (name === '' || price === '' || category === '') {
       toast.error('Fushat nuk duhet te jene te zbrazta')
     } else {
-      dispatch(updateProduct({ id: id, product: formData }))
+      dispatch(updateProduct({ id: id, product: { name, price, category } }))
       message !== '' && toast.success(message)
       navigate('/dashboard/products')
     }
@@ -127,18 +122,6 @@ export default function EditUser() {
                     {showCategories}
                   </select>
                 </div>
-                <label htmlFor="unlimited" className="space-x-3 text-gray-500">
-                  <input
-                    type="checkbox"
-                    name="unlimited"
-                    id="unlimited"
-                    className="text-dark border border-dark rounded py-2 px-2"
-                    checked={unlimited ? true : false}
-                    onChange={handleChange}
-                    placeholder="Sheno cmimin"
-                  />
-                  <span>Produkti nuk ka sasi</span>
-                </label>
                 <Button title="Ruaj" buttonStyle={7} />
                 <Button
                   title="Kthehu mbrapa"

@@ -9,6 +9,7 @@ import shiftReducer from '../features/shifts/shiftSlice'
 import reportReducer from '../features/reports/reportSlice'
 import dashboardReducer from '../features/dashboard/dashboardSlice'
 import roleReducer from '../features/role/roleSlice'
+import stockReducer from '../features/stock/stockSlice'
 
 export const store = configureStore({
   reducer: {
@@ -22,5 +23,6 @@ export const store = configureStore({
     reports: reportReducer,
     dashboard: dashboardReducer,
     roles: roleReducer,
+    stocks: stockReducer,
   },
 })

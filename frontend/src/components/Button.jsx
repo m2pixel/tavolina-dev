@@ -8,11 +8,11 @@ export default function Button(props) {
   switch (btnStyle) {
     case 1:
       btn =
-        'bg-dark text-white cursor-pointer underline underline-offset-8 decoration-primary w-fit text-white hover:text-primary text-sm py-2 px-2 md:py-5 md:px-5 md:text-xl rounded shadow-xl'
+        'bg-dark text-white cursor-pointer underline underline-offset-8 decoration-primary w-fit text-white hover:text-primary py-2 px-2 md:py-5 md:px-5 text-sm md:text-base lg:text-xl rounded shadow-xl'
       break
     case 2:
       btn =
-        'bg-secondary text-white text-center cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 md:text-xl rounded shadow-xl'
+        'bg-secondary md:w-full text-white text-center cursor-pointer uppercase font-semibold md:font-medium hover:opacity-75 py-5 px-5 text-sm md:text-base lg:text-xl rounded shadow-xl'
       break
     case 3:
       btn =

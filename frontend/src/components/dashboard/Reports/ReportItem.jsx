@@ -6,7 +6,6 @@ function ReportItem({ report, showReport, deleteReport }) {
   }
   return (
     <tr className="border-b">
-      <td className="px-6 py-4 text-sm text-dark ">{report._id}</td>
       <td className="px-6 py-4 text-sm text-dark font-semibold ">
         {report.user}
       </td>

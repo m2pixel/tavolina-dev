@@ -2,7 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDeleteLeft } from '@fortawesome/free-solid-svg-icons'
 
-export default function TableItem({ status, order, deleteItem }) {
+export default function TableItem({ status, order, deleteItem, canDelete }) {
   const style =
     status === 'orders'
       ? 'border border-dark text-center font-semibold '
@@ -13,6 +13,14 @@ export default function TableItem({ status, order, deleteItem }) {
       <td className="border border-dark">{order.name}</td>
       <td className="border border-dark">{order.qty}</td>
       <td className="border border-dark">{order.price.toFixed(2)} &euro;</td>
+      {canDelete && (
+        <td
+          onClick={() => deleteItem(order.order_id)}
+          className="cursor-pointer hover:text-primary"
+        >
+          <FontAwesomeIcon icon={faDeleteLeft} />
+        </td>
+      )}
       {status === 'currentOrder' && (
         <td
           onClick={() => deleteItem(order.order_id)}

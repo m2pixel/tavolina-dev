@@ -12,11 +12,16 @@ const productSchema = mongoose.Schema(
     },
     qty: {
       type: Number,
+      default: 0,
       required: false,
     },
     category: {
       type: String,
       required: [true, 'Select product category'],
+    },
+    unlimited: {
+      type: Boolean,
+      required: false,
     },
   },
   {

@@ -1,7 +1,12 @@
 import TableItem from '../components/TableItem'
 import uuid from 'react-uuid'
 
-export default function TableData({ currentOrder, ordersUI, deleteItem }) {
+export default function TableData({
+  currentOrder,
+  ordersUI,
+  deleteItem,
+  canDelete,
+}) {
   const showOrders = ordersUI?.map((order) => {
     return (
       <TableItem
@@ -9,6 +14,7 @@ export default function TableData({ currentOrder, ordersUI, deleteItem }) {
         order={order}
         deleteItem={deleteItem}
         status="orders"
+        canDelete={canDelete}
       />
     )
   })
@@ -18,7 +24,6 @@ export default function TableData({ currentOrder, ordersUI, deleteItem }) {
       <TableItem
         key={uuid()}
         order={order}
-        // createdAt={}
         deleteItem={deleteItem}
         status="currentOrder"
       />

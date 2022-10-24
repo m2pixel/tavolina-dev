@@ -28,11 +28,15 @@ function Login() {
     }
 
     if (isSuccess && user) {
-      if (user.role === 'admin') {
+      if (user.permission) {
         navigate('/dashboard')
       } else {
         navigate('/')
       }
+    }
+
+    if (user) {
+      navigate('/')
     }
 
     dispatch(reset())

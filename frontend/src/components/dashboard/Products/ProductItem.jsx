@@ -7,6 +7,9 @@ function ProductItem({ product, deleteProduct }) {
       <td className="px-6 py-4 text-sm text-dark ">
         {product.price.toFixed(2)}&euro;
       </td>
+      <td className="px-6 py-4 text-sm text-dark ">
+        {product.unlimited ? 'Unlimited' : product.qty}
+      </td>
       <td className="px-6 py-4 text-sm text-dark ">{product.category}</td>
       <td className="text-sm font-light px-6 py-4 whitespace-nowrap">
         <Link to={`/dashboard/product/${product._id}`}>

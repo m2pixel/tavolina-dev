@@ -14,7 +14,7 @@ const Logo = ({ logoStyle }) => {
   )
 }
 
-function Header() {
+function Header({ permission, dropPermission }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -25,6 +25,7 @@ function Header() {
     navigate('/login')
     dispatch(logout())
     dispatch(reset())
+    dropPermission()
   }
 
   const resetToggle = () => {
@@ -43,7 +44,7 @@ function Header() {
                 <Logo logoStyle="w-10 md:w-16 fill-primary md:border-2 border-primary rounded md:px-2 md:py-1 hover:fill-secondary " />
               </Link>
             </div>
-            {user.permission && (
+            {permission && (
               <NavigateIcons isHome={isHome} resetToggle={resetToggle} />
             )}
             <div className="flex items-center space-x-3 ">

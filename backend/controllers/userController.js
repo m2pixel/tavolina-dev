@@ -191,7 +191,7 @@ const userPermission = asyncHandler(async (req, res) => {
     throw new Error('User not found')
   }
 
-  res.status(200).json({ permission: user.role.permission })
+  res.status(200).json({ permission: user.role.permission, user })
 })
 
 // Generate JWT

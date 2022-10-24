@@ -19,7 +19,7 @@ function Dashboard() {
   const dispatch = useDispatch()
   const { orders, records, total, message, isError, isSuccess, isLoading } =
     useSelector((state) => state.dashboard)
-  const { user } = useSelector((state) => state.auth)
+  const { user, hasPermission } = useSelector((state) => state.auth)
   const [lastShift, setLastShift] = useState({ user: '', total: 0 })
 
   useEffect(() => {
@@ -32,14 +32,14 @@ function Dashboard() {
     }
 
     if (!user.permission) {
-      navigate('/error/401')
+      // navigate('/error/401')
     }
 
     return () => {
       dispatch(reset())
     }
   }, [dispatch, isError, message, navigate])
-
+  console.log(hasPermission)
   useEffect(() => {
     if (records.length > 0) {
       setLastShift({ user: records[0].user, total: records[0].total })
