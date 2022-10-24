@@ -25,7 +25,10 @@ const createShift = asyncHandler(async (req, res) => {
 })
 
 const getShifts = asyncHandler(async (req, res) => {
-  const shifts = await Shift.find().sort({ _id: -1 }).populate('user', 'name')
+  const shifts = await Shift.find()
+    .sort({ _id: -1 })
+    .populate('user', 'name')
+    .limit(15)
 
   if (!shifts) {
     res.status(400)

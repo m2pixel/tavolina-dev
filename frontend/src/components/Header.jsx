@@ -44,8 +44,12 @@ function Header({ permission, dropPermission }) {
                 <Logo logoStyle="w-10 md:w-16 fill-primary md:border-2 border-primary rounded md:px-2 md:py-1 hover:fill-secondary " />
               </Link>
             </div>
-            {permission && (
+            {permission ? (
               <NavigateIcons isHome={isHome} resetToggle={resetToggle} />
+            ) : (
+              <div className="md:pt-3 pt-1 uppercase text-sm">
+                Kamarieri: <span className="font-bold">{user.name}</span>
+              </div>
             )}
             <div className="flex items-center space-x-3 ">
               {/* <div className="invisible md:visible md:bg-primary md:bg-opacity-30 rounded md:px-10">

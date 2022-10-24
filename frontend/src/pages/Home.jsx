@@ -53,7 +53,6 @@ export default function Home() {
 
   return (
     <div className="">
-      <p className="text-right">user:</p>
       {hasShift ? (
         <div className="flex flex-wrap gap-2 md:gap-5 justify-around mx-2 md:mx-6">
           {showTables}

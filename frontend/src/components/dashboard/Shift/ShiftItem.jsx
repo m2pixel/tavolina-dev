@@ -20,7 +20,7 @@ export default function ShiftItem({ shift, user, close }) {
               ? 'bg-gray-300 text-white px-2 py-1 rounded font-semibold'
               : 'bg-primary text-white px-2 py-1 rounded font-semibold'
           }
-          onClick={() => close({ id: shift._id, user: shift.user._id})}
+          onClick={() => close({ id: shift._id, user: shift.user._id })}
           disabled={shift.closed ? true : false}
         >
           Mbylle
