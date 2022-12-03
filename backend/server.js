@@ -1,6 +1,7 @@
 const express = require('express')
 const colors = require('colors')
 const dotenv = require('dotenv').config()
+const cors = require('cors')
 const { errorHandler } = require('./middleware/errorMiddleware')
 const connectDB = require('./config/db')
 const port = process.env.PORT || 3000
@@ -23,6 +24,12 @@ app.use('/api/dashboard', require('./routes/dashboardRoutes'))
 app.use('/api/roles', require('./routes/roleRoutes'))
 app.use('/api/stock', require('./routes/stockRoutes'))
 
+app.use(
+  cors({
+    origin: 'https://tavolina-front.vercel.app',
+    credentials: true,
+  })
+)
 // Serve frontend
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/build')))
