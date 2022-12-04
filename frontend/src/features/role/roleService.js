@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'https://scrubs-lizard.cyclic.app/api/roles/'
+const API_URL = 'https://tavolina-production.up.railway.app/api/roles/'
 
 const getRoles = async (token) => {
   const config = {

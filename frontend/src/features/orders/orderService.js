@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'https://scrubs-lizard.cyclic.app/api/orders/'
+const API_URL = 'https://tavolina-production.up.railway.app/api/orders/'
 
 // Create new order
 const createOrder = async (order, token) => {

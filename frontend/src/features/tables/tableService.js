@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'https://scrubs-lizard.cyclic.app/api/tables/'
+const API_URL = 'https://tavolina-production.up.railway.app/api/tables/'
 
 // Create new table
 const createTable = async (tableData, token) => {

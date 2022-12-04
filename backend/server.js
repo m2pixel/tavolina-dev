@@ -15,7 +15,11 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use(
   cors({
-    origin: 'https://tavolina-front.onrender.com',
+    origin: [
+      'https://tavolina-front.onrender.com',
+      'https://www.tavolina.online',
+      'https://tavolina.online',
+    ],
     credentials: true,
     // Set the browser cache time for preflight responses
     maxAge: 86400,
