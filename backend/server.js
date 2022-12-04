@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use(
   cors({
-    origin: 'https://www.tavolina.online',
+    origin: 'https://tavolina-front.onrender.com',
     credentials: true,
   })
 )
