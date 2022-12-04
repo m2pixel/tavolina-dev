@@ -13,6 +13,13 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
+app.use(
+  cors({
+    origin: 'https://tavolina-front.vercel.app',
+    credentials: true,
+  })
+)
+
 app.use('/api/categories', require('./routes/categoryRoutes'))
 app.use('/api/users', require('./routes/userRoutes'))
 app.use('/api/tables', require('./routes/tableRoutes'))
@@ -24,12 +31,6 @@ app.use('/api/dashboard', require('./routes/dashboardRoutes'))
 app.use('/api/roles', require('./routes/roleRoutes'))
 app.use('/api/stock', require('./routes/stockRoutes'))
 
-app.use(
-  cors({
-    origin: 'https://tavolina-front.vercel.app',
-    credentials: true,
-  })
-)
 // Serve frontend
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/build')))
