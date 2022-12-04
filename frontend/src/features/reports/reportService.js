@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '/api/records/'
+const API_URL = 'https://scrubs-lizard.cyclic.app/api/records/'
 
 const getReports = async (token) => {
   const config = {

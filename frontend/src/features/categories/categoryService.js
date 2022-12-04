@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '/api/categories/'
+const API_URL = 'https://scrubs-lizard.cyclic.app/api/categories/'
 
 // create new category
 const createCategory = async (tableData, token) => {

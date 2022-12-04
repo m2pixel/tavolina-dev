@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use(
   cors({
-    origin: 'https://tavolina-front.vercel.app',
+    origin: 'https://www.tavolina.online',
     credentials: true,
   })
 )

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '/api/shifts/'
+const API_URL = 'https://scrubs-lizard.cyclic.app/api/shifts/'
 
 const createShift = async (userId, token) => {
   const config = {
@@ -50,14 +50,14 @@ const pushOrder = async (id, orderId, token) => {
   return response.data
 }
 
-const closeShift = async (shiftId,shift, token) => {
+const closeShift = async (shiftId, shift, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }
 
-  const response = await axios.put(API_URL + shiftId,shift, config)
+  const response = await axios.put(API_URL + shiftId, shift, config)
 
   return response.data
 }

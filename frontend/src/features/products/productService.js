@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '/api/products/'
+const API_URL = 'https://scrubs-lizard.cyclic.app/api/products/'
 
 // Create new product
 const createProduct = async (productData, token) => {

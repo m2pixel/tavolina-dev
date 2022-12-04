@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'https://tavolina-production.up.railway.app/api/users/'
+const API_URL = 'https://scrubs-lizard.cyclic.app/api/users/'
 
 // create user
 const createUser = async (userData, token) => {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = '/api/dashboard/'
+const API_URL = 'https://scrubs-lizard.cyclic.app/api/dashboard/'
 
 // Get orders
 const getOrders = async (token) => {
