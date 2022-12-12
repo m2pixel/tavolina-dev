@@ -25,6 +25,16 @@ const createShift = asyncHandler(async (req, res) => {
 })
 
 const getShifts = asyncHandler(async (req, res) => {
+  // try {
+  //   const shifts = await Shift.find()
+  //     .sort({ _id: -1 })
+  //     .populate('user', 'name')
+  //     .limit(15)
+
+  //   res.status(200).json(shifts)
+  // } catch (error) {
+  //   res.status(404).json({ message: error.message })
+  // }
   const shifts = await Shift.find()
     .sort({ _id: -1 })
     .populate('user', 'name')
@@ -39,9 +49,13 @@ const getShifts = asyncHandler(async (req, res) => {
 })
 
 const getShift = asyncHandler(async (req, res) => {
-  const shift = await Shift.findOne({ user: req.params.id, closed: false })
+  try {
+    const shift = await Shift.findOne({ user: req.params.id, closed: false })
 
-  res.status(200).json(shift)
+    res.status(200).json(shift)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
 })
 
 const pushOrder = asyncHandler(async (req, res) => {

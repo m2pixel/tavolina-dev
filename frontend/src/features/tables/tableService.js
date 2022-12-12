@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = 'https://tavolina-production.up.railway.app/api/tables/'
+// const API_URL = 'https://tavolina.onrender.com/api/tables/'
+const API_URL = '/api/tables/'
 
 // Create new table
 const createTable = async (tableData, token) => {

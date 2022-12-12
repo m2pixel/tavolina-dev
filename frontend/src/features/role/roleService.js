@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = 'https://tavolina-production.up.railway.app/api/roles/'
+// const API_URL = 'https://tavolina.onrender.com/api/roles/'
+const API_URL = '/api/roles/'
 
 const getRoles = async (token) => {
   const config = {

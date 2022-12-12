@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = 'https://tavolina-production.up.railway.app/api/products/'
+// const API_URL = 'https://tavolina.onrender.com/api/products/'
+const API_URL = '/api/products/'
 
 // Create new product
 const createProduct = async (productData, token) => {

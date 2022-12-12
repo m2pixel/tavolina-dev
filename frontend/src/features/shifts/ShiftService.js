@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = 'https://tavolina-production.up.railway.app/api/shifts/'
+// const API_URL = 'https://tavolina.onrender.com/api/shifts/'
+const API_URL = '/api/shifts/'
 
 const createShift = async (userId, token) => {
   const config = {

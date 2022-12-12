@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = 'https://tavolina-production.up.railway.app/api/stock/'
+// const API_URL = 'https://tavolina.onrender.com/api/stock/'
+const API_URL = '/api/stock/'
 
 // add to stock
 const createStock = async (stock, token) => {
