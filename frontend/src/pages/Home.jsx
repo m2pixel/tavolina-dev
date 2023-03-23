@@ -9,7 +9,6 @@ import Spinner from '../components/Spinner'
 export default function Home() {
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth)
-  const localUser = JSON.parse(localStorage.getItem('user'))
   const { tables } = useSelector((state) => state.tables)
   const shift = useSelector((state) => state.shifts)
   const dispatch = useDispatch()
